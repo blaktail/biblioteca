@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1076033362833",
+    "project_id": "bibliotecastorage",
+    "storage_bucket": "bibliotecastorage.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1076033362833:android:2309f2acb38fc2760fd830",
+        "android_client_info": {
+          "package_name": "com.example.biblioteca"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1076033362833-98qt320t9vo9i6hvmscjj5b8cgrbqjbn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.biblioteca",
+            "certificate_hash": "bfd4c0456c0ff892ea06417a801a51750161eb68"
+          }
+        },
+        {
+          "client_id": "1076033362833-0cq26m62bgip36nbn3pogser5h5g520p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqzB7algCmAPHIw28NbhTDxvBWTsdcjPk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1076033362833-0cq26m62bgip36nbn3pogser5h5g520p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
