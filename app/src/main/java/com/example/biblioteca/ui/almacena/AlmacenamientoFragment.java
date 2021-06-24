@@ -1,4 +1,4 @@
-package com.example.biblioteca.ui.home;
+package com.example.biblioteca.ui.almacena;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,24 +12,23 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.biblioteca.R;
-import com.example.biblioteca.databinding.FragmentHomeBinding;
+import com.example.biblioteca.databinding.FragmentAlmacenamientoBinding;
 
-public class HomeFragment extends Fragment {
+public class AlmacenamientoFragment extends Fragment {
 
-    private HomeViewModel homeViewModel;
-    private FragmentHomeBinding binding;
+    private AlmacenamientoViewModel almacenamientoViewModel;
+    private FragmentAlmacenamientoBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
+        almacenamientoViewModel =
+                new ViewModelProvider(this).get(AlmacenamientoViewModel.class);
 
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
+        binding = FragmentAlmacenamientoBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textHome;
-        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        final TextView textView = binding.textSlideshow;
+        almacenamientoViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
