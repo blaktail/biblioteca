@@ -7,9 +7,7 @@ public class Documento {
         return Id_doc;
     }
 
-    public void setId_doc(String Id_doc) {
-        Id_doc = Id_doc;
-    }
+    public void setId_doc(String id_doc) { Id_doc = id_doc; }
 
     public String getId_usuario() {
         return Id_usuario;
