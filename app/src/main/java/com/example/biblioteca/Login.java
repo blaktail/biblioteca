@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 public class Login extends AppCompatActivity {
@@ -30,6 +31,7 @@ public class Login extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
 
     private static final String TAG = "GOOGLE_SIGN_IN";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +46,7 @@ public class Login extends AppCompatActivity {
                 .requestEmail()
                 .build();
         googleSignInClient = GoogleSignIn.getClient(this,gso);
-
         firebaseAuth = FirebaseAuth.getInstance();
-
         binding.googleSignBtn.setOnClickListener(view -> {
             Intent intent = googleSignInClient.getSignInIntent();
             startActivityForResult(intent,RC_SIGN_IN);
@@ -93,11 +93,13 @@ public class Login extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        if (account!=null){
+        if (account!=null&&user!=null){
+            Log.d("firebaseuser", user.toString());
             Toast.makeText(this,"Iniciando sesion",Toast.LENGTH_SHORT).show();
             firebaseAuthWithGoogle(account);
+
 
         }
 
