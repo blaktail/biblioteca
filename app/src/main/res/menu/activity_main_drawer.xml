@@ -17,11 +17,13 @@
             android:id="@+id/nav_almacenamiento"
             android:icon="@drawable/ic_storage"
             android:title="@string/m_almace" />
+    </group>
+    <group android:id="@+id/g_logout">
         <item
             android:id="@+id/log_out"
             android:icon="@drawable/googleg_disabled_color_18"
-            android:title="@string/log_out"
 
-            />
+            android:onClick="Signout"
+            android:title="@string/log_out" />
     </group>
 </menu>

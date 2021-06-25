@@ -1,14 +1,14 @@
 package com.example.biblioteca.Clases;
 
 public class Documento {
-    String Nombre,Id,Id_usuario,path_file;
+    String Nombre,Id_doc,Id_usuario,path_file;
 
-    public String getId() {
-        return Id;
+    public String getId_doc() {
+        return Id_doc;
     }
 
-    public void setId(String id) {
-        Id = id;
+    public void setId_doc(String Id_doc) {
+        Id_doc = Id_doc;
     }
 
     public String getId_usuario() {
