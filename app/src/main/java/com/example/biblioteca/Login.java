@@ -50,7 +50,10 @@ public class Login extends AppCompatActivity {
         binding.googleSignBtn.setOnClickListener(view -> {
             Intent intent = googleSignInClient.getSignInIntent();
             startActivityForResult(intent,RC_SIGN_IN);
+
+
         });
+
     }
 
 
@@ -90,7 +93,7 @@ public class Login extends AppCompatActivity {
                 );
     }
 
-    @Override
+   @Override
     protected void onStart() {
         super.onStart();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -104,4 +107,6 @@ public class Login extends AppCompatActivity {
         }
 
     }
+
+
 }

@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -37,6 +39,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        GoogleSignInOptions gso = new GoogleSignInOptions
+                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build();
+        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(MainActivity.this, gso);
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(MainActivity.this);
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -63,25 +70,34 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        binding.navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
                 if (item.getTitle().equals("Cerrar Sesion")){
                     Log.d(TAG, "onNavigationItemSelected: "+item.getTitle().toString());
                     FirebaseAuth.getInstance().signOut();
-                    GoogleSignInOptions gso = new GoogleSignInOptions
-                            .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build();
-                    GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(MainActivity.this, gso);
+
                     googleSignInClient.signOut();
                     startActivity(new Intent(MainActivity.this, Login.class));
                     Toast.makeText(MainActivity.this,"A cerrado sesion correctamente",Toast.LENGTH_SHORT).show();
                     finish();
                 }
-
-
                 return false;
             }
         });
+
+        if (account!=null){
+            navigationView = (NavigationView) findViewById(R.id.nav_view);
+            View headerView = navigationView.getHeaderView(0);
+            TextView correo = (TextView) headerView.findViewById(R.id.nav_correo);
+            TextView user = (TextView) headerView.findViewById(R.id.nav_nombre);
+            ImageView img = headerView.findViewById(R.id.nav_imageView);
+            user.setText(account.getDisplayName());
+            correo.setText(account.getEmail());
+            img.setImageURI(account.getPhotoUrl());
+
+
+        }
 
 
     }
