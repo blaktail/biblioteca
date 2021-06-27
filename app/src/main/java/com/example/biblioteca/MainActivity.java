@@ -1,8 +1,11 @@
 package com.example.biblioteca;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -15,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -25,6 +29,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.biblioteca.databinding.ActivityMainBinding;
+import com.example.biblioteca.ui.almacena.AlmacenamientoFragment;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -47,23 +52,45 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG ="logout";
     GoogleSignInClient googleSignInClient;
 
+    public final String[] EXTERNAL_PERMS = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+    public final int EXTERNAL_REQUEST = 138;
+    public boolean requestForExternalStoragePermission() {
 
-    @Override
+        boolean isPermissionOn = true;
+        final int version = Build.VERSION.SDK_INT;
+        if (version >= 23) {
+            if (!canAccessExternalSd()) {
+                isPermissionOn = false;
+                requestPermissions(EXTERNAL_PERMS, EXTERNAL_REQUEST);
+            }
+        }
+        return isPermissionOn;
+    }
+
+    public boolean canAccessExternalSd() {
+        return (hasPermission());
+    }
+
+    private boolean hasPermission() {
+        return (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE));
+    }
+
+        @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        //permisos
+        requestForExternalStoragePermission();
+        //acceder a la cuenta de google creada
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(MainActivity.this);
         GoogleSignInOptions gso = new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestProfile().build();
-
         googleSignInClient = GoogleSignIn.getClient(MainActivity.this, gso);
 
+        //generico creacion de drawer para la vista de fragmentos
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         NavigationView  navigationView = binding.navView ;
         setSupportActionBar(binding.appBarMain.tool);
-
         DrawerLayout drawer = binding.drawerLayout;
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -115,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         FirebaseAuth.getInstance().signOut();
         googleSignInClient.signOut();
         startActivity(new Intent(MainActivity.this, Login.class));
-        Toast.makeText(MainActivity.this, "A cerrado sesion correctamente", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, "Ha cerrado sesion correctamente", Toast.LENGTH_SHORT).show();
         finish();
     }
 }

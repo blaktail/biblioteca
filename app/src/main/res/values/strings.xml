@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">biblioteca</string>
+    <string name="app_name">Biblioteca</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -11,4 +11,7 @@
     <string name="m_fav">Favoritos</string>
     <string name="m_nube">Nube</string>
     <string name="m_almace">Almacenamiento</string>
+    <string name="atr_s">Atrás</string>
+    <string name="almacenamiento">Almacenamiento</string>
+    <string name="sdcard">SDcard</string>
 </resources>

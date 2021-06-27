@@ -39,7 +39,7 @@ public class Login extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
 
         setContentView(binding.getRoot());
-
+        //creacion de opciones para el uso de inicio con Google
         GoogleSignInOptions gso = new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -47,11 +47,10 @@ public class Login extends AppCompatActivity {
                 .build();
         googleSignInClient = GoogleSignIn.getClient(this,gso);
         firebaseAuth = FirebaseAuth.getInstance();
+        //Inicio de sesion con google
         binding.googleSignBtn.setOnClickListener(view -> {
             Intent intent = googleSignInClient.getSignInIntent();
             startActivityForResult(intent,RC_SIGN_IN);
-
-
         });
 
     }
@@ -60,7 +59,6 @@ public class Login extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == RC_SIGN_IN){
             Log.d(TAG,"google correcto");
             Task<GoogleSignInAccount> at = GoogleSignIn.getSignedInAccountFromIntent(data);
@@ -74,7 +72,7 @@ public class Login extends AppCompatActivity {
             }
         }
     }
-
+    //Valida el usuario por credencial entre firebase y google
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(),null);
         firebaseAuth.signInWithCredential(credential)
@@ -82,12 +80,11 @@ public class Login extends AppCompatActivity {
                     @Override
                     public void onSuccess(AuthResult authResult) {
                         startActivity(new Intent(Login.this, MainActivity.class));
-                        Toast.makeText(Login.this,"Bienvenido",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Login.this,"Bienvenido "+account.getDisplayName(),Toast.LENGTH_SHORT).show();
                         finish();
 
                     }
                 })
-
                 .addOnFailureListener(e ->
                         Log.d(TAG,"Error en firebase")
                 );
@@ -96,14 +93,12 @@ public class Login extends AppCompatActivity {
    @Override
     protected void onStart() {
         super.onStart();
+        //valida si existe un usuario previo he inicia sesion
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         if (account!=null&&user!=null){
-            Log.d("firebaseuser", user.toString());
-            Toast.makeText(this,"Iniciando sesion",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Iniciando sesion...",Toast.LENGTH_SHORT).show();
             firebaseAuthWithGoogle(account);
-
-
         }
 
     }
