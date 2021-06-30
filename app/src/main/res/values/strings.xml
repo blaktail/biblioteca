@@ -12,6 +12,12 @@
     <string name="m_nube">Nube</string>
     <string name="m_almace">Almacenamiento</string>
     <string name="atr_s">Atrás</string>
-    <string name="almacenamiento">Almacenamiento</string>
+    <string name="carpetadescargas">Descargas</string>
     <string name="sdcard">SDcard</string>
+    <string name="informacion">Informacion</string>
+    <string name="borrar">Borrar</string>
+    <string name="cargar">Cargar</string>
+    <string name="Cargar">cargar</string>
+    <string name="Borrar">borrar</string>
+    <string name="Informacion">informacion</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.biblioteca.ui.fav;
+package com.example.biblioteca.ui;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,26 +16,17 @@ import com.example.biblioteca.databinding.FragmentFavoritosBinding;
 
 public class FavoritosFragment extends Fragment {
 
-    private FavoritosViewModel favoritosViewModel;
     private FragmentFavoritosBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        favoritosViewModel =
-                new ViewModelProvider(this).get(FavoritosViewModel.class);
-
         binding = FragmentFavoritosBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         final TextView textView = binding.textHome;
-        favoritosViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
-        return root;
+        return binding.getRoot();
     }
+
 
     @Override
     public void onDestroyView() {

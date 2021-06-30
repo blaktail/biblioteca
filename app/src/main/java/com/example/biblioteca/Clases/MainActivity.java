@@ -1,22 +1,19 @@
-package com.example.biblioteca;
+package com.example.biblioteca.Clases;
 
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -28,33 +25,28 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.biblioteca.R;
 import com.example.biblioteca.databinding.ActivityMainBinding;
-import com.example.biblioteca.ui.almacena.AlmacenamientoFragment;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptionsExtension;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.net.URL;
-
-import javax.xml.transform.URIResolver;
+import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
     private static final String TAG ="logout";
+    File pathdescargas = new File(Environment.getExternalStorageDirectory()+File.separator+"BibliotecaAppDocumentos");
     GoogleSignInClient googleSignInClient;
 
     public final String[] EXTERNAL_PERMS = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     public final int EXTERNAL_REQUEST = 138;
-    public boolean requestForExternalStoragePermission() {
+    public void requestForExternalStoragePermission() {
 
         boolean isPermissionOn = true;
         final int version = Build.VERSION.SDK_INT;
@@ -64,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
                 requestPermissions(EXTERNAL_PERMS, EXTERNAL_REQUEST);
             }
         }
-        return isPermissionOn;
     }
 
     public boolean canAccessExternalSd() {
@@ -78,6 +69,13 @@ public class MainActivity extends AppCompatActivity {
         @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //
+            if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+                Log.d("MyApp", "No SDCARD");
+            } else {
+                File directory = pathdescargas;
+                directory.mkdirs();
+            }
         //permisos
         requestForExternalStoragePermission();
         //acceder a la cuenta de google creada
@@ -113,12 +111,21 @@ public class MainActivity extends AppCompatActivity {
             user.setText(account.getDisplayName());
             correo.setText(account.getEmail());
             Glide.with(this).load(account.getPhotoUrl())
-                    .apply(new RequestOptions().override(250, 250))
+                    .apply(new RequestOptions()
+                            .override(100))
                     .into(img);
 
         }
 
     }
+    //Metodos para obtener el boton "atrás" al presionarlo
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+
+
     //Metodos generados
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

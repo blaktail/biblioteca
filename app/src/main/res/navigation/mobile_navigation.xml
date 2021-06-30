@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/nav_fav"
-        android:name="com.example.biblioteca.ui.fav.FavoritosFragment"
+        android:name="com.example.biblioteca.ui.FavoritosFragment"
         android:label="@string/m_fav"
         tools:layout="@layout/fragment_favoritos" />
 
     <fragment
         android:id="@+id/nav_nube"
-        android:name="com.example.biblioteca.ui.nube.NubeFragment"
+        android:name="com.example.biblioteca.ui.NubeFragment"
         android:label="@string/m_nube"
         tools:layout="@layout/fragment_nube" />
 
     <fragment
         android:id="@+id/nav_almacenamiento"
-        android:name="com.example.biblioteca.ui.almacena.AlmacenamientoFragment"
+        android:name="com.example.biblioteca.ui.AlmacenamientoFragment"
         android:label="@string/m_almace"
         tools:layout="@layout/fragment_almacenamiento" />
 </navigation>

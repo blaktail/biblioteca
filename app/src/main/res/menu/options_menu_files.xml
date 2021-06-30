@@ -5,13 +5,13 @@
 
     <group >
         <item
-            android:id="@+id/open"
-            android:title="Abrir" />
-        <item
             android:id="@+id/upload"
-            android:title="Cargar" />
+            android:title="@string/Cargar" />
         <item
             android:id="@+id/delete"
-            android:title="Borrar" />
+            android:title="@string/Borrar" />
+        <item
+            android:id="@+id/info"
+            android:title="@string/Informacion" />
     </group>
 </menu>
