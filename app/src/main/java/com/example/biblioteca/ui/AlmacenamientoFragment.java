@@ -28,7 +28,6 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.biblioteca.R;
 import com.example.biblioteca.databinding.FragmentAlmacenamientoBinding;
@@ -52,6 +51,7 @@ public class AlmacenamientoFragment extends Fragment {
     public TextView txtPath;
     public CustomList customList;
     public File dir;
+    public String path;
     public ArrayList<Integer> intSelected;
     public ArrayList<String> strSelected;
     String TAG = "menu";
@@ -289,14 +289,24 @@ public class AlmacenamientoFragment extends Fragment {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.info:
-                DialogFragment newFragment = new infodialogfragment();
+                path = dirPath+"/"+theNamesOfFiles.get(info.position);
+                File file = new File(path);
+                long createdDate = file.lastModified();
+                DialogFragment newFragment = new InfoDialogFragment();
+                Bundle args = new Bundle();
+                args.putString("name",file.getName());
+                args.putString("path",path);
+                args.putString("date",String.valueOf(createdDate));
+                args.putString("size", String.valueOf(file.getTotalSpace()));
+
+                Toast.makeText(getContext(),String.valueOf(createdDate), Toast.LENGTH_LONG).show();
+                newFragment.setArguments(args);
                 newFragment.show(getActivity().getSupportFragmentManager(), "Informacion");
 
-                Toast.makeText(getContext(),"info, Agregar dialogo", Toast.LENGTH_LONG).show();
 
                 return false;
             case R.id.upload:
-                String path = dirPath+"/"+theNamesOfFiles.get(info.position);
+                path = dirPath+"/"+theNamesOfFiles.get(info.position);
                 Toast.makeText(getContext(),path, Toast.LENGTH_LONG).show();
 
                 Log.d(TAG, "onContextItemSelected: "+path);

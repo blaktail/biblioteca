@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.biblioteca.R;
 import com.example.biblioteca.databinding.FragmentFavoritosBinding;
 
 public class FavoritosFragment extends Fragment {
@@ -23,7 +25,8 @@ public class FavoritosFragment extends Fragment {
         binding = FragmentFavoritosBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textHome;
+        GridView gridView = binding.GridViewFav.findViewById(R.id.Grid_View_Fav);
+
         return binding.getRoot();
     }
 
