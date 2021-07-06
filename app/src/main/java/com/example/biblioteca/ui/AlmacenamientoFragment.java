@@ -29,6 +29,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import com.example.biblioteca.Clases.FilesAdapter;
 import com.example.biblioteca.R;
 import com.example.biblioteca.databinding.FragmentAlmacenamientoBinding;
 
@@ -48,8 +49,7 @@ public class AlmacenamientoFragment extends Fragment {
     public String ParentdirPath="";
     public ArrayList<String> theNamesOfFiles;
     public ArrayList<Integer> intImages;
-    public TextView txtPath;
-    public CustomList customList;
+    public FilesAdapter filesAdapter;
     public File dir;
     public String path;
     public ArrayList<Integer> intSelected;
@@ -76,11 +76,9 @@ public class AlmacenamientoFragment extends Fragment {
         File pathdescargas = new File(Environment.getExternalStorageDirectory()+File.separator+"BibliotecaAppDocumentos");
 
 
-        //Get txtvPath
-
-        if (android.os.Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
         {
-            dirPath = String.valueOf(android.os.Environment.getExternalStorageDirectory());
+            dirPath = String.valueOf(Environment.getExternalStorageDirectory());
             Log.d("storage",dirPath);
 
         }
@@ -104,14 +102,12 @@ public class AlmacenamientoFragment extends Fragment {
         descargasb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED))
+                if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
                 {
                     ///mounted
                     dirPath = String.valueOf(pathdescargas);
-
                     RefreshListView();
                     RefreshAdapter();
-                    RefreshListView();
                 }
             }
         });
@@ -121,10 +117,10 @@ public class AlmacenamientoFragment extends Fragment {
         btnStoragesd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (android.os.Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
+                if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
                 {
                     ///mounted
-                    dirPath = String.valueOf(android.os.Environment.getExternalStorageDirectory());
+                    dirPath = String.valueOf(Environment.getExternalStorageDirectory());
 
                     RefreshListView();
                     RefreshAdapter();
@@ -147,7 +143,7 @@ public class AlmacenamientoFragment extends Fragment {
                         RefreshAdapter();
                     }else{
                         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                        intent.setAction(android.content.Intent.ACTION_VIEW);
+                        intent.setAction(Intent.ACTION_VIEW);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                         File file = new File(dirPath);
@@ -219,57 +215,21 @@ public class AlmacenamientoFragment extends Fragment {
     }
     //Metodos para el manejo de archivos
     private void  set_Adapter(){
-        customList = new CustomList();
-        lst_Folder.setAdapter(customList);
+         filesAdapter = new FilesAdapter(this.getActivity(),intImages,theNamesOfFiles);
+
+         lst_Folder.setAdapter(filesAdapter);
     }
     //Metodos para el manejo de archivos
 
     public void RefreshAdapter(){
-        customList.notifyDataSetChanged();
+        filesAdapter.notifyDataSetChanged();
     }
-
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
-
-
-    //Clase interna para la vista personalizada del visor de archivos
-
-    public class CustomList extends BaseAdapter {
-
-        @Override
-        public int getCount() {
-            return intImages.size();
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return i;
-        }
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-
-            View view1 = getLayoutInflater().inflate(R.layout.custom_list_almacenamiento, null);
-
-            ImageView imageView = (ImageView) view1.findViewById(R.id.ItemIcon);
-            TextView txtPath = (TextView) view1.findViewById(R.id.ItemName);
-
-            imageView.setImageResource(intImages.get(i));
-            txtPath.setText(theNamesOfFiles.get(i));
-
-            return view1;
-        }
-    }
-
 
     @Override
     public void onCreateContextMenu(@NonNull @NotNull ContextMenu menu,
@@ -290,6 +250,7 @@ public class AlmacenamientoFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.info:
                 path = dirPath+"/"+theNamesOfFiles.get(info.position);
+                int img = intImages.get(info.position);
                 File file = new File(path);
                 long createdDate = file.lastModified();
                 DialogFragment newFragment = new InfoDialogFragment();
@@ -298,7 +259,8 @@ public class AlmacenamientoFragment extends Fragment {
                 args.putString("path",path);
                 args.putString("date",String.valueOf(createdDate));
                 args.putString("size", String.valueOf(file.getTotalSpace()));
-
+                args.putInt("img",img);
+                Log.d(TAG, "onContextItemSelected: "+img);
                 Toast.makeText(getContext(),String.valueOf(createdDate), Toast.LENGTH_LONG).show();
                 newFragment.setArguments(args);
                 newFragment.show(getActivity().getSupportFragmentManager(), "Informacion");
