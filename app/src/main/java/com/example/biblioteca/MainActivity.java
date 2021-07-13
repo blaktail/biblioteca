@@ -145,4 +145,8 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(MainActivity.this, "Ha cerrado sesion correctamente", Toast.LENGTH_SHORT).show();
         finish();
     }
+
+
+
+
 }

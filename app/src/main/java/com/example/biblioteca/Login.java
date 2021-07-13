@@ -3,6 +3,7 @@ package com.example.biblioteca;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -99,8 +100,21 @@ public class Login extends AppCompatActivity {
         if (account!=null&&user!=null){
             Toast.makeText(this,"Iniciando sesion...",Toast.LENGTH_SHORT).show();
             firebaseAuthWithGoogle(account);
-        }
+        } else if(user!=null)       {
 
+    }
+
+    }
+
+    public void irRegistro(View view){
+        Intent i = new Intent(this, Register.class);
+        startActivity(i);
+    }
+
+    public void irIniciosesion(View view){
+        Intent i = new Intent(this, LoginCorreo.class);
+        startActivity(i);
+        finish();
     }
 
 
