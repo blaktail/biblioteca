@@ -1,4 +1,4 @@
-package com.example.biblioteca;
+package com.example.biblioteca.Clases;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,8 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.example.biblioteca.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -43,6 +42,7 @@ public class LoginCorreo extends AppCompatActivity {
     public void irLogin(View view){
         Intent i = new Intent(this, Login.class);
         startActivity(i);
+        finish();
     }
 
     public void IniciarSesion(){
@@ -56,7 +56,7 @@ public class LoginCorreo extends AppCompatActivity {
                             FirebaseUser user = firebaseAuth.getCurrentUser();
                             startActivity(new Intent(LoginCorreo.this, MainActivity.class));
                             Toast.makeText(LoginCorreo.this,"Bienvenido "+user.getDisplayName(),Toast.LENGTH_SHORT).show();
-                            finish();
+                            finishAffinity();
                         } else {
                             // If sign in fails, display a message to the user.
 

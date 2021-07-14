@@ -18,6 +18,9 @@ public class NubeFragment extends Fragment {
         binding = FragmentNubeBinding.inflate(inflater, container, false);
 
         return binding.getRoot();
+
+
+        //binding.gridnube.setAdapter(null);
     }
 
     @Override

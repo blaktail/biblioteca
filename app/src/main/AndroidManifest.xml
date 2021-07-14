@@ -7,20 +7,21 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:requestLegacyExternalStorage="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Biblioteca">
-        <activity android:name=".LoginCorreo"></activity>
-        <activity android:name=".Register" />
+        <activity android:name=".Clases.LoginCorreo" />
+        <activity android:name=".Clases.Register" />
         <activity
-            android:name=".MainActivity"
+            android:name=".Clases.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/Theme.Biblioteca.NoActionBar" />
         <activity
-            android:name=".Login"
+            android:name=".Clases.Login"
             android:theme="@style/Theme.Biblioteca.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -33,6 +33,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.io.File;
 
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
     private static final String TAG ="logout";
+
     File pathdescargas = new File(Environment.getExternalStorageDirectory()+File.separator+"BibliotecaAppDocumentos");
     GoogleSignInClient googleSignInClient;
 
@@ -69,52 +71,61 @@ public class MainActivity extends AppCompatActivity {
         @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //
+
             if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
                 Log.d("MyApp", "No SDCARD");
             } else {
                 File directory = pathdescargas;
                 directory.mkdirs();
             }
-        //permisos
-        requestForExternalStoragePermission();
-        //acceder a la cuenta de google creada
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(MainActivity.this);
-        GoogleSignInOptions gso = new GoogleSignInOptions
-                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestProfile().build();
-        googleSignInClient = GoogleSignIn.getClient(MainActivity.this, gso);
 
-        //generico creacion de drawer para la vista de fragmentos
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        NavigationView  navigationView = binding.navView ;
-        setSupportActionBar(binding.appBarMain.tool);
-        DrawerLayout drawer = binding.drawerLayout;
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_fav, R.id.nav_nube, R.id.nav_almacenamiento)
-                .setDrawerLayout(drawer)
-                .build();
-        NavController navController = Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment_content_main);
-        NavigationUI.setupActionBarWithNavController(MainActivity.this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(binding.navView, navController);
-
+            //permisos
+            requestForExternalStoragePermission();
+            //acceder a la cuenta de google creada
+            GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(MainActivity.this);
+            GoogleSignInOptions gso = new GoogleSignInOptions
+                    .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestProfile().build();
+            googleSignInClient = GoogleSignIn.getClient(MainActivity.this, gso);
+            //acceder al usuario de firebase
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            //generico creacion de drawer para la vista de fragmentos
+            binding = ActivityMainBinding.inflate(getLayoutInflater());
+            setContentView(binding.getRoot());
+            NavigationView  navigationView = binding.navView ;
+            setSupportActionBar(binding.appBarMain.tool);
+            DrawerLayout drawer = binding.drawerLayout;
+            // Passing each menu ID as a set of Ids because each
+            // menu should be considered as top level destinations.
+            mAppBarConfiguration = new AppBarConfiguration.Builder(
+                    R.id.nav_fav, R.id.nav_nube, R.id.nav_almacenamiento)
+                    .setDrawerLayout(drawer)
+                    .build();
+            NavController navController = Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment_content_main);
+            NavigationUI.setupActionBarWithNavController(MainActivity.this, navController, mAppBarConfiguration);
+            NavigationUI.setupWithNavController(binding.navView, navController);
+            //setters para metodos "Header View"
+            View headerView = navigationView.getHeaderView(0);
+            ImageView img = headerView.findViewById(R.id.nav_imageView);
+            navigationView = (NavigationView) findViewById(R.id.nav_view);
+            TextView correo = (TextView) headerView.findViewById(R.id.nav_correo);
+            TextView userv = (TextView) headerView.findViewById(R.id.nav_nombre);
 
         //creacion de la vista "Header View"
         if (account!=null){
-            navigationView = (NavigationView) findViewById(R.id.nav_view);
-            View headerView = navigationView.getHeaderView(0);
-            TextView correo = (TextView) headerView.findViewById(R.id.nav_correo);
-            TextView user = (TextView) headerView.findViewById(R.id.nav_nombre);
-            ImageView img = headerView.findViewById(R.id.nav_imageView);
-            user.setText(account.getDisplayName());
+
+            userv.setText(account.getDisplayName());
             correo.setText(account.getEmail());
             Glide.with(this).load(account.getPhotoUrl())
                     .apply(new RequestOptions()
                             .override(100))
                     .into(img);
-
+        }else if (user!=null){
+            correo.setText(user.getEmail());
+            userv.setText(user.getDisplayName());
+            Glide.with(this).load(user.getPhotoUrl())
+                    .apply(new RequestOptions()
+                            .override(100))
+                    .into(img);
         }
 
     }

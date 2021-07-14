@@ -29,6 +29,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import com.example.biblioteca.Clases.Documento;
 import com.example.biblioteca.Clases.FilesAdapter;
 import com.example.biblioteca.R;
 import com.example.biblioteca.databinding.FragmentAlmacenamientoBinding;
@@ -269,12 +270,21 @@ public class AlmacenamientoFragment extends Fragment {
                 return false;
             case R.id.upload:
                 path = dirPath+"/"+theNamesOfFiles.get(info.position);
-                Toast.makeText(getContext(),path, Toast.LENGTH_LONG).show();
-
+                file = new File(path);
                 Log.d(TAG, "onContextItemSelected: "+path);
+                Documento doc = new Documento();
+                String ext = file.getName().substring(file.getName().indexOf(".") + 1);
+                if (ext.equals("pdf")){
+                    doc.carga(file.getName(),file,this.getContext());
+                }else {
+                    Toast.makeText(getContext(),"Solo pdfs", Toast.LENGTH_LONG).show();
+
+                }
+
 
                 return true;
             case R.id.delete:
+
                 Toast.makeText(getContext(),"Borrar,Agregar dialogo", Toast.LENGTH_LONG).show();
 
             default:

@@ -101,9 +101,12 @@ public class Login extends AppCompatActivity {
         if (account!=null&&user!=null){
             Toast.makeText(this,"Iniciando sesion...",Toast.LENGTH_SHORT).show();
             firebaseAuthWithGoogle(account);
-        } else if(user!=null)       {
+        } else if(user!=null){
+            startActivity(new Intent(Login.this, MainActivity.class));
+            Toast.makeText(Login.this,"Bienvenido "+user.getDisplayName(),Toast.LENGTH_SHORT).show();
+            finish();
 
-    }
+        }
 
     }
 
@@ -115,7 +118,7 @@ public class Login extends AppCompatActivity {
     public void irIniciosesion(View view){
         Intent i = new Intent(this, LoginCorreo.class);
         startActivity(i);
-        finish();
+
     }
 
 
