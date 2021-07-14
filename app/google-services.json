@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "1076033362833",
+    "firebase_url": "https://bibliotecastorage-default-rtdb.firebaseio.com",
     "project_id": "bibliotecastorage",
     "storage_bucket": "bibliotecastorage.appspot.com"
   },
@@ -14,11 +15,27 @@
       },
       "oauth_client": [
         {
-          "client_id": "1076033362833-98qt320t9vo9i6hvmscjj5b8cgrbqjbn.apps.googleusercontent.com",
+          "client_id": "1076033362833-1is5lqjfs49dvf12f5p1d09sodvco22e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.biblioteca",
+            "certificate_hash": "8b23659731d6ca1f8394aab68b7c53e150f27b36"
+          }
+        },
+        {
+          "client_id": "1076033362833-mdfn9s5t780gmcvb9gup2g3o9c4ne71r.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.biblioteca",
             "certificate_hash": "bfd4c0456c0ff892ea06417a801a51750161eb68"
+          }
+        },
+        {
+          "client_id": "1076033362833-tskgvj394tq4eghjq7a42ftk30pdq7q2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.biblioteca",
+            "certificate_hash": "b3aa5e564a2db2e083ea41000c0d876e808bfe75"
           }
         },
         {

@@ -99,7 +99,7 @@ public class Documento {
                                     builder.setTitle("Archivo Cargado");
                                     builder
                                             .setPositiveButton(
-                                                    "Ver",
+                                                    "Ver + documento",
                                                     new DialogInterface
                                                             .OnClickListener() {
                                                         @Override
