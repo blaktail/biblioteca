@@ -6,10 +6,24 @@
     android:layout_height="match_parent"
     tools:context=".ui.NubeFragment">
 
+    <TextView
+        android:id="@+id/empynube"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text='"No hay archivos en su nube, Carge algunos primero"'
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <GridView
-        android:id="@+id/gridnube"
-        android:layout_width="409dp"
-        android:layout_height="729dp"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="1dp" />
+        android:id="@+id/listnube"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </GridView>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,6 +8,12 @@
             android:id="@+id/upload"
             android:title="@string/Cargar" />
         <item
+            android:id="@+id/favorite"
+            android:title="@string/favorito" />
+        <item
+            android:id="@+id/rename"
+            android:title="@string/renombrar" />
+        <item
             android:id="@+id/delete"
             android:title="@string/Borrar" />
         <item

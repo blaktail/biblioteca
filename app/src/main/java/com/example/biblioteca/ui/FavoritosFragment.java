@@ -28,12 +28,19 @@ public class FavoritosFragment extends Fragment {
         GridView gridView = binding.GridViewFav.findViewById(R.id.Grid_View_Fav);
 
         return binding.getRoot();
+
     }
+
+
 
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    public void adapter(){
+
     }
 }
