@@ -1,11 +1,15 @@
 package com.example.biblioteca.Clases;
 
 import android.Manifest;
+import android.app.DownloadManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,6 +39,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+
 import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
@@ -49,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
     public final String[] EXTERNAL_PERMS = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     public final int EXTERNAL_REQUEST = 138;
     public void requestForExternalStoragePermission() {
-
         boolean isPermissionOn = true;
         final int version = Build.VERSION.SDK_INT;
         if (version >= 23) {
@@ -59,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
     public boolean canAccessExternalSd() {
         return (hasPermission());
     }
@@ -79,6 +82,12 @@ public class MainActivity extends AppCompatActivity {
                 directory.mkdirs();
             }
 
+            if (android.os.Build.VERSION.SDK_INT > 9) {
+                StrictMode.ThreadPolicy policy =
+                        new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                StrictMode.setThreadPolicy(policy);
+            }
+
             //permisos
             requestForExternalStoragePermission();
             //acceder a la cuenta de google creada
@@ -91,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
             //generico creacion de drawer para la vista de fragmentos
             binding = ActivityMainBinding.inflate(getLayoutInflater());
             setContentView(binding.getRoot());
+
             NavigationView  navigationView = binding.navView ;
             setSupportActionBar(binding.appBarMain.tool);
             DrawerLayout drawer = binding.drawerLayout;
@@ -115,17 +125,13 @@ public class MainActivity extends AppCompatActivity {
 
             userv.setText(account.getDisplayName());
             correo.setText(account.getEmail());
-            Glide.with(this).load(account.getPhotoUrl())
-                    .apply(new RequestOptions()
-                            .override(100))
-                    .into(img);
+            Glide.with(getApplication()).load(account.getPhotoUrl()).override(img.getWidth(),img.getHeight()).into(img);
         }else if (user!=null){
             correo.setText(user.getEmail());
             userv.setText(user.getDisplayName());
-            Glide.with(this).load(user.getPhotoUrl())
-                    .apply(new RequestOptions()
-                            .override(100))
-                    .into(img);
+            Glide.with(getApplication()).load(user.getPhotoUrl()).override(img.getWidth(),img.getHeight()).into(img);
+
+
         }
 
     }

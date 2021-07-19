@@ -3,7 +3,10 @@ package com.example.biblioteca.ui;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,6 +20,8 @@ import com.example.biblioteca.R;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -26,7 +31,7 @@ public class InfoDialogFragment extends DialogFragment {
 
 
     private String name,path,date;
-    private Integer img;
+    private byte[] img;
     @NonNull
     @NotNull
     @Override
@@ -36,7 +41,7 @@ public class InfoDialogFragment extends DialogFragment {
              name = mArgs.getString("name");
              path = mArgs.getString("path");
              date = mArgs.getString("date");
-             img = mArgs.getInt("img");
+             img = mArgs.getByteArray("img");
         }
         AlertDialog.Builder build = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -47,13 +52,15 @@ public class InfoDialogFragment extends DialogFragment {
         TextView pathtxv = inflatedView.findViewById(R.id.txv_info_path);
         TextView datetxv = inflatedView.findViewById(R.id.txv_info_date);
         ImageView imageView = inflatedView.findViewById(R.id.imageView_info);
-        imageView.setImageResource(img);
+
+        Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
+
+        imageView.setImageBitmap(bitmap);
         nametxv.setText(name);
         pathtxv.setText(path);
-
         Date dates = Calendar.getInstance().getTime();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-        String date = dateFormat.format(dates);
+        date = dateFormat.format(dates);
 
         datetxv.setText(date.trim());
 

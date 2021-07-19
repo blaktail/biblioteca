@@ -17,7 +17,13 @@
     <string name="informacion">Informacion</string>
     <string name="borrar">Borrar</string>
     <string name="cargar">Cargar</string>
-    <string name="Cargar">cargar</string>
-    <string name="Borrar">borrar</string>
-    <string name="Informacion">informacion</string>
+    <string name="Borrar">Borrar</string>
+    <string name="Informacion">Informacion</string>
+    <string name="ubicaci_n">Ubicación:</string>
+    <string name="textview">TextView</string>
+    <string name="fecha">Fecha:</string>
+    <string name="favorito">Favorito</string>
+    <string name="renombrar">Renombrar</string>
+    <string name="Cargar">Cargar</string>
+
 </resources>
