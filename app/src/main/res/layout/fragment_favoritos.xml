@@ -7,7 +7,7 @@
     tools:context=".ui.FavoritosFragment">
 
     <GridView
-        android:id="@+id/Grid_View_Fav"
+        android:id="@+id/listafav"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <EditText
-        android:id="@+id/newfolder"
+        android:id="@+id/newname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text" />
