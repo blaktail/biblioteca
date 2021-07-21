@@ -5,11 +5,13 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.pdf.PdfRenderer;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -29,7 +31,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
@@ -60,13 +61,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
 public class AlmacenamientoFragment extends Fragment {
@@ -77,18 +80,20 @@ public class AlmacenamientoFragment extends Fragment {
     public String ParentdirPath="";
     public ArrayList<String> theNamesOfFiles;
     public ArrayList<Bitmap> intImages;
+    public ArrayList<String> pathlist;
     public FilesAdapter filesAdapter;
     public File dir;
     public String path;
     public ArrayList<Integer> intSelected;
-    String TAG = "menu";
+    String TAG = "fav";
     public FirebaseUser auth;
     FirebaseDatabase database;
     public FirebaseStorage storage;
     public DatabaseReference myRef;
     StorageReference storageRef;
     String ref;
-
+    ArrayList<File> files;
+    SharedPreferences sharedPreferences;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -100,6 +105,10 @@ public class AlmacenamientoFragment extends Fragment {
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference("Documentos");
         storageRef =storage.getReference("Archivos");
+        files = new ArrayList<>();
+        pathlist = new ArrayList<>();
+        String[] archivos = getActivity().fileList();
+        sharedPreferences = getActivity().getSharedPreferences("Archivos", MODE_PRIVATE);
 
 
         //Variables necesarias
@@ -107,9 +116,12 @@ public class AlmacenamientoFragment extends Fragment {
         intImages = new ArrayList<Bitmap>();
         intSelected = new ArrayList<Integer>();
 
+
+        //Variables para la vista
         lst_Folder=(ListView) binding.lsvFolder.findViewById(R.id.lsvFolder);
         registerForContextMenu(lst_Folder);
 
+        //url para descargas
         File pathdescargas = new File(Environment.getExternalStorageDirectory()+File.separator+"BibliotecaAppDocumentos");
 
 
@@ -222,8 +234,6 @@ public class AlmacenamientoFragment extends Fragment {
 
     //Metodos para manejos de archivos
     private void RefreshListView() {
-
-
         ///
         try{
         dir = new File(dirPath);
@@ -233,49 +243,31 @@ public class AlmacenamientoFragment extends Fragment {
         theNamesOfFiles.clear();
         intImages.clear();
             for (int i = 0; i < filelist.length; i++) {
-                String var=extencion(filelist[i]);
-                if (var!=null){
-                    Log.d(TAG, "RefreshListView: "+var);
                     theNamesOfFiles.add(filelist[i].getName());
-                    //   intImages[i] = R.drawable.folder;
                     if(filelist[i].isDirectory()){
                         intImages.add(folder);
-                    }else if(filelist[i].isFile()) {
+                    }
+                    else if(filelist[i].isFile()) {
+                        intImages.add(getBitmap(filelist[i]));
+                    }
+                    else if (extencion(filelist[i]).equals("application/pdf")){
                         intImages.add(pdfToBitmap(filelist[i]));
                     }else{
                         intImages.add(file);
                     }
-                }else {
-                    Log.d(TAG, "RefreshListView: "+var);
-                    theNamesOfFiles.add(filelist[i].getName());
-                    //   intImages[i] = R.drawable.folder;
-                    if(filelist[i].isDirectory()){
-                        intImages.add(folder);
-                    }else {
-                        intImages.add(file);
-                    }
-                }
-
-
-
-            }
+               }
         }catch (Exception e){
             Log.d(TAG, "RefreshListView: "+e.toString());
         }
-
-
-
-
-        //////////////////////////////////////////////////
-
-
-
-
-
+    }
+    //metodo para obtener las imagenes de archivos
+    private Bitmap getBitmap(File file){
+        return ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(file.getPath()),100,100);
     }
     //Metodos para el manejo de archivos
     private void  set_Adapter(){
          filesAdapter = new FilesAdapter(this.getActivity(),intImages,theNamesOfFiles);
+
          lst_Folder.setAdapter(filesAdapter);
     }
 
@@ -313,17 +305,9 @@ public class AlmacenamientoFragment extends Fragment {
             case R.id.info:
                 path = dirPath+"/"+theNamesOfFiles.get(info.position);
                 File file = new File(path);
-                long createdDate = file.lastModified();
-                DialogFragment newFragment = new InfoDialogFragment();
-                Bundle args = new Bundle();
-                args.putString("name",file.getName());
-                args.putString("path",path);
-                args.putString("date",String.valueOf(createdDate));
-                args.putString("size", String.valueOf(file.getTotalSpace()));
-                newFragment.setArguments(args);
-                newFragment.show(getActivity().getSupportFragmentManager(), "Informacion");
+                info(file);
                 return true;
-            case R.id.upload:
+            case R.id.save:
                 path = dirPath+"/"+theNamesOfFiles.get(info.position);
                 file = new File(path);
                 Documento doc = new Documento();
@@ -331,7 +315,7 @@ public class AlmacenamientoFragment extends Fragment {
                 if (ext.equals("pdf")){
                     carga(file.getName(),file,this.getContext(),getActivity().getSupportFragmentManager());
                 }else {
-                    Toast.makeText(getContext(),"Solo pdfs", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(),"Solo Archivos '.pdf'", Toast.LENGTH_LONG).show();
                 }
                 return true;
             case R.id.delete:
@@ -340,18 +324,62 @@ public class AlmacenamientoFragment extends Fragment {
                 delete(file);
                 return true;
             case R.id.favorite:
+                path = dirPath+"/"+theNamesOfFiles.get(info.position);
+                file = new File(path);
+                if (!file.isDirectory()){
+                    if (extencion(file).equals("application/pdf")){
+                        favorite(file);
+                        Toast.makeText(getContext(),"Archivo guardado como favorito",Toast.LENGTH_SHORT).show();
+
+                    }else {
+                        Toast.makeText(getContext(),"Solo Archivos PDF",Toast.LENGTH_SHORT).show();
+                    }
+                }else {
+                    Toast.makeText(getContext(),"Solo Archivos PDF",Toast.LENGTH_SHORT).show();
+                }
+
                 return true;
             case R.id.rename:
                 path = dirPath+"/"+theNamesOfFiles.get(info.position);
                 file = new File(path);
                 renombrar(file);
                 return true;
-
             default:
                 Toast.makeText(getContext(),"error, default", Toast.LENGTH_LONG).show();
                 return true;
         }
 
+    }
+
+    private void favorite(File file) {
+        pathlist.clear();
+        Set<String> set = new HashSet<String>();
+        set = sharedPreferences.getStringSet("files", null);
+        if (set!=null){
+            pathlist.addAll(set);
+            Log.d(TAG, "favorite: no soy null");
+        }else{
+            Log.d(TAG, "favorite: soy null");
+        }
+        pathlist.add(file.toPath().toString());
+        set = new HashSet<String>(pathlist);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putStringSet("files", set);
+        editor.commit();
+        Log.d(TAG, "favorite: "+set.toString());
+    }
+
+
+    private void info(File file) {
+        long createdDate = file.lastModified();
+        DialogFragment newFragment = new InfoDialogFragment();
+        Bundle args = new Bundle();
+        args.putString("name",file.getName());
+        args.putString("path",path);
+        args.putString("date",String.valueOf(createdDate));
+        args.putString("size", String.valueOf(file.getTotalSpace()));
+        newFragment.setArguments(args);
+        newFragment.show(getActivity().getSupportFragmentManager(), "Informacion");
     }
 
     private void delete(File file) {
@@ -369,8 +397,10 @@ public class AlmacenamientoFragment extends Fragment {
 
             RefreshListView();
             RefreshAdapter();
+            Toast.makeText(getContext(), file.getName()+" Eliminado correctamente", Toast.LENGTH_LONG).show();
 
         } catch (Exception e) {
+            Toast.makeText(getContext(), e.toString(), Toast.LENGTH_LONG).show();
             Toast.makeText(getContext(), e.toString(), Toast.LENGTH_LONG).show();
         }
     }
@@ -378,22 +408,21 @@ public class AlmacenamientoFragment extends Fragment {
     private void renombrar(File file) {
 
         try{
-
                 //RenameFolder Dialog Builder
                 AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
                 LayoutInflater inflater = this.getLayoutInflater();
                 final View dialogView = inflater.inflate(R.layout.dialog_rename_file, null);
                 dialogBuilder.setView(dialogView);
 
-                final EditText txtNewFolder = (EditText) dialogView.findViewById(R.id.newfolder);
-                txtNewFolder.setText(file.getName());
+                final EditText newname = (EditText) dialogView.findViewById(R.id.newname);
+            newname.setText(file.getName());
                 dialogBuilder.setTitle("Renombrar");
                 dialogBuilder.setMessage("Ingrese el nuevo nombre:");
                 dialogBuilder.setPositiveButton("Listo", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         File f = new File(file.toString());
                         extencion(file);
-                        File fRename = new File(dirPath+"/"+txtNewFolder.getText().toString()+"."+file.getName().substring(file.getName().indexOf(".") + 1));
+                        File fRename = new File(dirPath+"/"+newname.getText().toString()+"."+file.getName().substring(file.getName().indexOf(".") + 1));
                         f.renameTo(fRename);
                         //Refresh ListView
                         RefreshListView();
@@ -519,7 +548,7 @@ public class AlmacenamientoFragment extends Fragment {
         });
     }
 
-    private Bitmap pdfToBitmap(File pdfFile) {
+    public Bitmap pdfToBitmap(File pdfFile) {
         Bitmap bitmap = null;
         try {
             PdfRenderer renderer = new PdfRenderer(ParcelFileDescriptor.open(pdfFile, ParcelFileDescriptor.MODE_READ_ONLY));

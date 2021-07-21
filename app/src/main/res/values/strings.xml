@@ -25,5 +25,10 @@
     <string name="favorito">Favorito</string>
     <string name="renombrar">Renombrar</string>
     <string name="Cargar">Cargar</string>
+    <string name="abrir">Abrir</string>
+    <string name="abrir_nube">Abrir como Url</string>
+    <string name="guardar_en_su_nube">Guardar en su Nube</string>
+    <string name="eliminar_fav">Eliminar de favoritos</string>
+    <string name="eliminar_nube">Eliminar de su Nube</string>
 
 </resources>

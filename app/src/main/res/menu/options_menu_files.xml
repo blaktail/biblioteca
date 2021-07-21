@@ -5,8 +5,8 @@
 
     <group >
         <item
-            android:id="@+id/upload"
-            android:title="@string/Cargar" />
+            android:id="@+id/save"
+            android:title="@string/guardar_en_su_nube" />
         <item
             android:id="@+id/favorite"
             android:title="@string/favorito" />

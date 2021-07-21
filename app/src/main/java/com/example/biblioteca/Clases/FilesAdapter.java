@@ -1,20 +1,9 @@
 package com.example.biblioteca.Clases;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.pdf.PdfRenderer;
-import android.os.AsyncTask;
-import android.os.ParcelFileDescriptor;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,10 +12,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.biblioteca.R;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 
 public class FilesAdapter extends BaseAdapter {
@@ -34,7 +19,6 @@ public class FilesAdapter extends BaseAdapter {
     private final Activity context;
     private final ArrayList<Bitmap> imagenes;
     private final  ArrayList<String> texto;
-
 
 
     public FilesAdapter(Activity context, ArrayList<Bitmap> imagenes, ArrayList<String> texto) {
@@ -69,7 +53,8 @@ public class FilesAdapter extends BaseAdapter {
         RequestOptions options = new RequestOptions()
                 .centerCrop()
                 .placeholder(R.drawable.ic_loading_file)
-                .error(R.drawable.ic_download_error);
+                .error(R.drawable.file);
+
         Glide.with(context).load(imagenes.get(position)).apply(options).into(imageView);
 
 
