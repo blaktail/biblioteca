@@ -98,7 +98,7 @@ public class AlmacenamientoFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        //Metodos para el uso de fragmentos
+        /**Metodos para el uso de fragmentos*/
         binding = FragmentAlmacenamientoBinding.inflate(inflater, container, false);
         auth = FirebaseAuth.getInstance().getCurrentUser();
         storage = FirebaseStorage.getInstance();
@@ -111,17 +111,17 @@ public class AlmacenamientoFragment extends Fragment {
         sharedPreferences = getActivity().getSharedPreferences("Archivos", MODE_PRIVATE);
 
 
-        //Variables necesarias
+        /**Variables necesarias*/
         theNamesOfFiles = new ArrayList<String >();
         intImages = new ArrayList<Bitmap>();
         intSelected = new ArrayList<Integer>();
 
 
-        //Variables para la vista
+        /**Variables para la vista*/
         lst_Folder=(ListView) binding.lsvFolder.findViewById(R.id.lsvFolder);
         registerForContextMenu(lst_Folder);
 
-        //url para descargas
+        /**url para descargas*/
         File pathdescargas = new File(Environment.getExternalStorageDirectory()+File.separator+"BibliotecaAppDocumentos");
 
 
@@ -131,14 +131,14 @@ public class AlmacenamientoFragment extends Fragment {
             Log.d("storage",dirPath);
 
         }
-        //metodos necesarios para el uso de archivos
+        /**metodos necesarios para el uso de archivos*/
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
 
         RefreshListView();
         set_Adapter();
 
-        //Manejo del boton "Atrás"
+        /**Manejo del boton "Atrás"*/
         requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -153,7 +153,6 @@ public class AlmacenamientoFragment extends Fragment {
             public void onClick(View view) {
                 if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
                 {
-                    ///mounted
                     dirPath = String.valueOf(pathdescargas);
                     RefreshListView();
                     RefreshAdapter();
@@ -168,7 +167,7 @@ public class AlmacenamientoFragment extends Fragment {
             public void onClick(View view) {
                 if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
                 {
-                    ///mounted
+
                     dirPath = String.valueOf(Environment.getExternalStorageDirectory());
 
                     RefreshListView();
@@ -178,7 +177,7 @@ public class AlmacenamientoFragment extends Fragment {
         });
 
 
-        //Manejo de carpetas y archivos
+        /**Manejo de carpetas y archivos*/
         binding.lsvFolder.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -210,12 +209,12 @@ public class AlmacenamientoFragment extends Fragment {
             }
         });
 
-        //Metodos generados
+        /**Metodos generados*/
         lst_Folder.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
 
        return binding.getRoot();
     }
-    //manejo de el boton "Atrás"
+    /**manejo de el boton "Atrás"*/
     public void onbackpress(){
 
         if (!dirPath.equals(String.valueOf(android.os.Environment.getExternalStorageDirectory()))){
@@ -230,11 +229,10 @@ public class AlmacenamientoFragment extends Fragment {
 
 
     }
-    //Metodos para manejos de archivos
+    /**Metodos para manejos de archivos*/
 
-    //Metodos para manejos de archivos
     private void RefreshListView() {
-        ///
+        /**/
         try{
         dir = new File(dirPath);
         File[] filelist = dir.listFiles();
@@ -260,29 +258,42 @@ public class AlmacenamientoFragment extends Fragment {
             Log.d(TAG, "RefreshListView: "+e.toString());
         }
     }
-    //metodo para obtener las imagenes de archivos
+    /**metodo para obtener las imagenes de archivos*/
     private Bitmap getBitmap(File file){
         return ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(file.getPath()),100,100);
     }
-    //Metodos para el manejo de archivos
+
+    /**
+     *
+      */
     private void  set_Adapter(){
          filesAdapter = new FilesAdapter(this.getActivity(),intImages,theNamesOfFiles);
 
          lst_Folder.setAdapter(filesAdapter);
     }
 
-    //Metodos para el manejo de archivos
-
+    /**
+     *
+     */
     public void RefreshAdapter(){
         filesAdapter.notifyDataSetChanged();
     }
 
+    /**
+     *
+     */
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
 
+    /**
+     *
+     * @param menu
+     * @param v
+     * @param menuInfo
+     */
     @Override
     public void onCreateContextMenu(@NonNull @NotNull ContextMenu menu,
                                     @NonNull @NotNull View v,  ContextMenu.ContextMenuInfo menuInfo) {
@@ -295,11 +306,14 @@ public class AlmacenamientoFragment extends Fragment {
 
     }
 
-    //Creacion del menu de acciones en archivos
+    /**
+     *
+     * @param item
+     * @return
+     */
     @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onContextItemSelected(@NonNull @NotNull MenuItem item) {
-
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.info:
@@ -351,6 +365,10 @@ public class AlmacenamientoFragment extends Fragment {
 
     }
 
+    /**
+     *
+     * @param file
+     */
     private void favorite(File file) {
         pathlist.clear();
         Set<String> set = new HashSet<String>();
@@ -369,7 +387,10 @@ public class AlmacenamientoFragment extends Fragment {
         Log.d(TAG, "favorite: "+set.toString());
     }
 
-
+    /**
+     *
+     * @param file
+     */
     private void info(File file) {
         long createdDate = file.lastModified();
         DialogFragment newFragment = new InfoDialogFragment();
@@ -382,6 +403,10 @@ public class AlmacenamientoFragment extends Fragment {
         newFragment.show(getActivity().getSupportFragmentManager(), "Informacion");
     }
 
+    /**
+     *
+     * @param file
+     */
     private void delete(File file) {
         List<String> command = new ArrayList<String>();
         try {
@@ -389,11 +414,11 @@ public class AlmacenamientoFragment extends Fragment {
             command.add("/system/bin/rm");
             command.add("-rf");
             command.add(file.toString());
-            // start the subprocess
+
             ProcessBuilder pb = new ProcessBuilder(command);
             Process process = pb.start();
             process.waitFor();
-            //Refresh ListView
+
 
             RefreshListView();
             RefreshAdapter();
@@ -405,10 +430,14 @@ public class AlmacenamientoFragment extends Fragment {
         }
     }
 
+    /**
+     *
+     * @param file
+     */
     private void renombrar(File file) {
 
         try{
-                //RenameFolder Dialog Builder
+                /**RenameFolder Dialog Builder*/
                 AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
                 LayoutInflater inflater = this.getLayoutInflater();
                 final View dialogView = inflater.inflate(R.layout.dialog_rename_file, null);
@@ -424,14 +453,14 @@ public class AlmacenamientoFragment extends Fragment {
                         extencion(file);
                         File fRename = new File(dirPath+"/"+newname.getText().toString()+"."+file.getName().substring(file.getName().indexOf(".") + 1));
                         f.renameTo(fRename);
-                        //Refresh ListView
+                        /**Refresh ListView*/
                         RefreshListView();
                         RefreshAdapter();
                     }
                 });
                 dialogBuilder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        //pass
+                        /**pass*/
                     }
                 });
                 AlertDialog b = dialogBuilder.create();
@@ -441,6 +470,9 @@ public class AlmacenamientoFragment extends Fragment {
         }
     }
 
+    /**
+     * Metodo para el manejo del ciclo de vida de la app
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -448,6 +480,11 @@ public class AlmacenamientoFragment extends Fragment {
         set_Adapter();
     }
 
+    /**Obetner
+     *
+     * @param file
+     * @return
+     */
     public String extencion(File file){
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         String ext = file.getName().substring(file.getName().indexOf(".") + 1);
@@ -455,21 +492,30 @@ public class AlmacenamientoFragment extends Fragment {
         return mime.getMimeTypeFromExtension(ext);
     }
 
+    /**
+     * Se obtiene una instancia en Firebase para cargar el archivo
+     * @param nombre
+     * @param path
+     * @param context
+     * @param fragmentManager
+     */
     public void carga(String nombre, File path, Context context, FragmentManager fragmentManager) {
         Documento doc = new Documento();
-        //preparacion de pdf
+        /**preparacion de pdf*/
         FileInputStream stream = null;
         try {
             stream = new FileInputStream(new File(String.valueOf(path)));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        //creacion de imagen
+        /**creacion de imagen*/
         Bitmap image  = pdfToBitmap(new File(String.valueOf(path)));
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
-        //
+        /**
+         * Carga de archivos IMG para el PDF y El PDF como Stream
+         * */
 
         AlertDialog.Builder builder
                 = new AlertDialog
@@ -548,6 +594,11 @@ public class AlmacenamientoFragment extends Fragment {
         });
     }
 
+    /**
+     *  Metodo para crear una instantanea de la primera pagina del PDF seleccionado
+     * @param pdfFile, Archivo completo del pdf
+     * @return bitmap, El cual es una "vista previa" de la primera imagen del pdf"
+     */
     public Bitmap pdfToBitmap(File pdfFile) {
         Bitmap bitmap = null;
         try {
@@ -573,6 +624,13 @@ public class AlmacenamientoFragment extends Fragment {
         return bitmap;
     }
 
+    /**
+     * Metodo generado para la cracion del AlertDialog
+     * @param context
+     * @param title
+     * @param msg
+     * @param listener
+     */
     public void showAlertDialog(Context context, String title ,String msg, DialogInterface.OnClickListener listener){
         AlertDialog.Builder builder=new AlertDialog.Builder(context);
         builder.setTitle(title);
