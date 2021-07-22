@@ -4,14 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.AlmacenamientoFragment">
+    tools:context=".Fragmentos.AlmacenamientoFragment">
 
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <TableRow
-
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
 
@@ -20,17 +19,36 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/download_main"
-                    android:layout_width="210dp"
+                <ImageButton
+                    android:id="@+id/imageButton"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/carpetadescargas" />
+                    android:src="@drawable/ic_arrowback" />
 
-                <Button
-                    android:id="@+id/sd_storage"
+                <TextView
+                    android:id="@+id/path"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/sdcard" />
+                    android:layout_height="match_parent"
+                    android:text="TextView" />
+            </LinearLayout>
+
+        </TableRow>
+
+        <TableRow
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:id="@+id/spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
             </LinearLayout>
 
         </TableRow>

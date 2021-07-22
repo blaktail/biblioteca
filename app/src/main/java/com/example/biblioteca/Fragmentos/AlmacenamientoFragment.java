@@ -1,4 +1,4 @@
-package com.example.biblioteca.ui;
+package com.example.biblioteca.Fragmentos;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -28,7 +28,6 @@ import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -39,8 +38,9 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.biblioteca.Adapters.FilesAdapter;
 import com.example.biblioteca.Clases.Documento;
-import com.example.biblioteca.Clases.FilesAdapter;
+import com.example.biblioteca.Clases.MainActivity;
 import com.example.biblioteca.R;
 import com.example.biblioteca.databinding.FragmentAlmacenamientoBinding;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -94,11 +94,19 @@ public class AlmacenamientoFragment extends Fragment {
     String ref;
     ArrayList<File> files;
     SharedPreferences sharedPreferences;
+    String[] spnAction;
 
 
+    /**
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        /**Metodos para el uso de fragmentos*/
+
         binding = FragmentAlmacenamientoBinding.inflate(inflater, container, false);
         auth = FirebaseAuth.getInstance().getCurrentUser();
         storage = FirebaseStorage.getInstance();
@@ -107,39 +115,45 @@ public class AlmacenamientoFragment extends Fragment {
         storageRef =storage.getReference("Archivos");
         files = new ArrayList<>();
         pathlist = new ArrayList<>();
-        String[] archivos = getActivity().fileList();
         sharedPreferences = getActivity().getSharedPreferences("Archivos", MODE_PRIVATE);
-
-
-        /**Variables necesarias*/
         theNamesOfFiles = new ArrayList<String >();
         intImages = new ArrayList<Bitmap>();
         intSelected = new ArrayList<Integer>();
 
 
-        /**Variables para la vista*/
+
         lst_Folder=(ListView) binding.lsvFolder.findViewById(R.id.lsvFolder);
+
         registerForContextMenu(lst_Folder);
 
-        /**url para descargas*/
-        File pathdescargas = new File(Environment.getExternalStorageDirectory()+File.separator+"BibliotecaAppDocumentos");
+
+        String pathdescargas = (Environment.DIRECTORY_DOWNLOADS.toString());
+        String storageDirectory = (Environment.getExternalStorageDirectory().toString());
 
 
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
         {
-            dirPath = String.valueOf(Environment.getExternalStorageDirectory());
-            Log.d("storage",dirPath);
-
+            dirPath = storageDirectory;
+            txpath();
         }
-        /**metodos necesarios para el uso de archivos*/
+
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
 
         RefreshListView();
         set_Adapter();
 
-        /**Manejo del boton "Atrás"*/
+
+        binding.imageButton.findViewById(R.id.imageButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onbackpress();
+            }
+        });
         requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            /**
+             *
+             */
             @Override
             public void handleOnBackPressed() {
                 onbackpress();
@@ -147,38 +161,17 @@ public class AlmacenamientoFragment extends Fragment {
         });
 
 
-        Button descargasb = binding.downloadMain.findViewById(R.id.download_main);
-        descargasb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
-                {
-                    dirPath = String.valueOf(pathdescargas);
-                    RefreshListView();
-                    RefreshAdapter();
-                }
-            }
-        });
 
 
-        Button btnStoragesd = binding.sdStorage.findViewById(R.id.sd_storage);
-        btnStoragesd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
-                {
 
-                    dirPath = String.valueOf(Environment.getExternalStorageDirectory());
-
-                    RefreshListView();
-                    RefreshAdapter();
-                }
-            }
-        });
-
-
-        /**Manejo de carpetas y archivos*/
         binding.lsvFolder.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            /**
+             *
+             * @param adapterView
+             * @param view
+             * @param i
+             * @param l
+             */
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 try{
@@ -189,6 +182,7 @@ public class AlmacenamientoFragment extends Fragment {
                     if (f.isDirectory()){
                         RefreshListView();
                         RefreshAdapter();
+                        txpath();
                     }else{
                         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                         intent.setAction(Intent.ACTION_VIEW);
@@ -200,6 +194,7 @@ public class AlmacenamientoFragment extends Fragment {
                         intent.setDataAndType(Uri.fromFile(file), type);
                         startActivity(intent);
                         dirPath=ParentdirPath;
+                        txpath();
                     }
 
                 }catch (Exception e){
@@ -209,10 +204,13 @@ public class AlmacenamientoFragment extends Fragment {
             }
         });
 
-        /**Metodos generados*/
         lst_Folder.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
 
        return binding.getRoot();
+    }
+    private void txpath(){
+        binding.path.setText(dirPath);
+
     }
     /**manejo de el boton "Atrás"*/
     public void onbackpress(){
@@ -230,7 +228,6 @@ public class AlmacenamientoFragment extends Fragment {
 
     }
     /**Metodos para manejos de archivos*/
-
     private void RefreshListView() {
         /**/
         try{
@@ -248,9 +245,7 @@ public class AlmacenamientoFragment extends Fragment {
                     else if(filelist[i].isFile()) {
                         intImages.add(getBitmap(filelist[i]));
                     }
-                    else if (extencion(filelist[i]).equals("application/pdf")){
-                        intImages.add(pdfToBitmap(filelist[i]));
-                    }else{
+                    else{
                         intImages.add(file);
                     }
                }
@@ -265,10 +260,9 @@ public class AlmacenamientoFragment extends Fragment {
 
     /**
      *
-      */
+     */
     private void  set_Adapter(){
          filesAdapter = new FilesAdapter(this.getActivity(),intImages,theNamesOfFiles);
-
          lst_Folder.setAdapter(filesAdapter);
     }
 
@@ -277,6 +271,7 @@ public class AlmacenamientoFragment extends Fragment {
      */
     public void RefreshAdapter(){
         filesAdapter.notifyDataSetChanged();
+        txpath();
     }
 
     /**
@@ -319,7 +314,7 @@ public class AlmacenamientoFragment extends Fragment {
             case R.id.info:
                 path = dirPath+"/"+theNamesOfFiles.get(info.position);
                 File file = new File(path);
-                info(file);
+                info(file,intImages.get(info.position));
                 return true;
             case R.id.save:
                 path = dirPath+"/"+theNamesOfFiles.get(info.position);
@@ -344,7 +339,6 @@ public class AlmacenamientoFragment extends Fragment {
                     if (extencion(file).equals("application/pdf")){
                         favorite(file);
                         Toast.makeText(getContext(),"Archivo guardado como favorito",Toast.LENGTH_SHORT).show();
-
                     }else {
                         Toast.makeText(getContext(),"Solo Archivos PDF",Toast.LENGTH_SHORT).show();
                     }
@@ -384,14 +378,15 @@ public class AlmacenamientoFragment extends Fragment {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putStringSet("files", set);
         editor.commit();
-        Log.d(TAG, "favorite: "+set.toString());
+        new MainActivity().fav(getView());
     }
 
     /**
      *
      * @param file
+     * @param bitmap
      */
-    private void info(File file) {
+    private void info(File file, Bitmap bitmap) {
         long createdDate = file.lastModified();
         DialogFragment newFragment = new InfoDialogFragment();
         Bundle args = new Bundle();
@@ -399,6 +394,10 @@ public class AlmacenamientoFragment extends Fragment {
         args.putString("path",path);
         args.putString("date",String.valueOf(createdDate));
         args.putString("size", String.valueOf(file.getTotalSpace()));
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        args.putByteArray("img",byteArray);
         newFragment.setArguments(args);
         newFragment.show(getActivity().getSupportFragmentManager(), "Informacion");
     }
@@ -437,7 +436,7 @@ public class AlmacenamientoFragment extends Fragment {
     private void renombrar(File file) {
 
         try{
-                /**RenameFolder Dialog Builder*/
+
                 AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
                 LayoutInflater inflater = this.getLayoutInflater();
                 final View dialogView = inflater.inflate(R.layout.dialog_rename_file, null);
@@ -453,14 +452,12 @@ public class AlmacenamientoFragment extends Fragment {
                         extencion(file);
                         File fRename = new File(dirPath+"/"+newname.getText().toString()+"."+file.getName().substring(file.getName().indexOf(".") + 1));
                         f.renameTo(fRename);
-                        /**Refresh ListView*/
                         RefreshListView();
                         RefreshAdapter();
                     }
                 });
                 dialogBuilder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        /**pass*/
                     }
                 });
                 AlertDialog b = dialogBuilder.create();
@@ -561,18 +558,10 @@ public class AlmacenamientoFragment extends Fragment {
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     switch (i){
                                         case -1:
-                                                /* context.getApplicationContext().d
-                                                 NubeFragment nextFrag= new NubeFragment();
-                                                 fragmentManager.beginTransaction().
-                                                         .replace(R.id.nav_almacenamiento, nextFrag)
-                                                         .addToBackStack(null)
-                                                         .commit();*/
-
-                                            Log.d("nube", "onClick: "+i);
-                                        case -2:dialogInterface.cancel();
-                                        default:dialogInterface.cancel();
+                                            new MainActivity().nube(getView());
+                                        case -2: dialogInterface.cancel();
+                                        default: dialogInterface.cancel();
                                     }
-                                    Log.d("nube", "onClick: "+i);
                                 }
                             });
 

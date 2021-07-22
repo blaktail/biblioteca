@@ -1,22 +1,15 @@
-package com.example.biblioteca.Clases;
+package com.example.biblioteca.Adapters;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.pdf.PdfRenderer;
-import android.os.ParcelFileDescriptor;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.example.biblioteca.R;
-import com.example.biblioteca.ui.AlmacenamientoFragment;
+import com.example.biblioteca.Fragmentos.AlmacenamientoFragment;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -26,7 +19,11 @@ public class FavAdapter extends BaseAdapter {
     private final Activity context;
     private final ArrayList<String> files;
 
-
+    /**
+     *
+     * @param context
+     * @param files
+     */
     public FavAdapter(Activity context, ArrayList<String> files) {
         this.context = context;
         this.files = files;
@@ -58,6 +55,7 @@ public class FavAdapter extends BaseAdapter {
         pathtx.setText(file.getPath());
         Log.d("fav", "getView: "+file.getPath());
         AlmacenamientoFragment alm = new AlmacenamientoFragment();
+
         img.setImageBitmap(alm.pdfToBitmap(file));
 
         return view;

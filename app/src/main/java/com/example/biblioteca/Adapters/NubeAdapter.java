@@ -1,4 +1,4 @@
-package com.example.biblioteca.Clases;
+package com.example.biblioteca.Adapters;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -28,7 +28,12 @@ public class NubeAdapter extends BaseAdapter {
     private final ArrayList<String> imagenes;
     private final ArrayList<String> texto;
 
-
+    /**
+     *
+     * @param context
+     * @param imagenes
+     * @param texto
+     */
     public NubeAdapter(Activity context, ArrayList<String> imagenes, ArrayList<String> texto) {
         this.context = context;
         this.imagenes = imagenes;
