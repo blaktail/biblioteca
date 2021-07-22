@@ -7,19 +7,40 @@
 
     <fragment
         android:id="@+id/nav_fav"
-        android:name="com.example.biblioteca.ui.FavoritosFragment"
+        android:name="com.example.biblioteca.Fragmentos.FavoritosFragment"
         android:label="@string/m_fav"
-        tools:layout="@layout/fragment_favoritos" />
+        tools:layout="@layout/fragment_favoritos" >
+        <action
+            android:id="@+id/action_nav_fav_to_nav_nube"
+            app:destination="@id/nav_nube" />
+        <action
+            android:id="@+id/action_nav_fav_to_nav_almacenamiento"
+            app:destination="@id/nav_almacenamiento" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_nube"
-        android:name="com.example.biblioteca.ui.NubeFragment"
+        android:name="com.example.biblioteca.Fragmentos.NubeFragment"
         android:label="@string/m_nube"
-        tools:layout="@layout/fragment_nube" />
+        tools:layout="@layout/fragment_nube" >
+        <action
+            android:id="@+id/action_nav_nube_to_nav_almacenamiento"
+            app:destination="@id/nav_almacenamiento" />
+        <action
+            android:id="@+id/action_nav_nube_to_nav_fav"
+            app:destination="@id/nav_fav" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_almacenamiento"
-        android:name="com.example.biblioteca.ui.AlmacenamientoFragment"
+        android:name="com.example.biblioteca.Fragmentos.AlmacenamientoFragment"
         android:label="@string/m_almace"
-        tools:layout="@layout/fragment_almacenamiento" />
+        tools:layout="@layout/fragment_almacenamiento" >
+        <action
+            android:id="@+id/action_nav_almacenamiento_to_nav_fav"
+            app:destination="@id/nav_fav" />
+        <action
+            android:id="@+id/action_nav_almacenamiento_to_nav_nube"
+            app:destination="@id/nav_nube" />
+    </fragment>
 </navigation>

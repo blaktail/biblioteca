@@ -1,4 +1,4 @@
-package com.example.biblioteca.Clases;
+package com.example.biblioteca.Adapters;
 import android.app.Activity;
 
 import android.graphics.Bitmap;
@@ -20,7 +20,12 @@ public class FilesAdapter extends BaseAdapter {
     private final ArrayList<Bitmap> imagenes;
     private final  ArrayList<String> texto;
 
-
+    /**
+     *
+     * @param context
+     * @param imagenes
+     * @param texto
+     */
     public FilesAdapter(Activity context, ArrayList<Bitmap> imagenes, ArrayList<String> texto) {
         this.context = context;
         this.imagenes = imagenes;

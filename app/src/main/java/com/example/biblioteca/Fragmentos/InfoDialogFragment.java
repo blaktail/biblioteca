@@ -1,12 +1,10 @@
-package com.example.biblioteca.ui;
+package com.example.biblioteca.Fragmentos;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,12 +14,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.bumptech.glide.Glide;
 import com.example.biblioteca.R;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -30,8 +27,12 @@ import java.util.Date;
 public class InfoDialogFragment extends DialogFragment {
 
 
-    private String name,path,date;
+    private String name,path,date,img_pdf;
     private byte[] img;
+
+    public InfoDialogFragment() {
+    }
+
     @NonNull
     @NotNull
     @Override
@@ -42,6 +43,7 @@ public class InfoDialogFragment extends DialogFragment {
              path = mArgs.getString("path");
              date = mArgs.getString("date");
              img = mArgs.getByteArray("img");
+             img_pdf = mArgs.getString("img_pdf");
         }
         AlertDialog.Builder build = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -53,9 +55,15 @@ public class InfoDialogFragment extends DialogFragment {
         TextView datetxv = inflatedView.findViewById(R.id.txv_info_date);
         ImageView imageView = inflatedView.findViewById(R.id.imageView_info);
 
-        Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
 
-        imageView.setImageBitmap(bitmap);
+        if (img!=null){
+            Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
+            bitmap = Bitmap.createScaledBitmap(bitmap,imageView.getMaxWidth(),imageView.getMaxHeight(),true);
+            imageView.setImageBitmap(bitmap);
+        }else {
+            Glide.with(getContext()).load(img_pdf).override(imageView.getMaxWidth(),imageView.getMaxHeight()).into(imageView);
+        }
+
         nametxv.setText(name);
         pathtxv.setText(path);
         Date dates = Calendar.getInstance().getTime();

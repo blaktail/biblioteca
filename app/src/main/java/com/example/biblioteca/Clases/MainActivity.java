@@ -1,11 +1,8 @@
 package com.example.biblioteca.Clases;
 
 import android.Manifest;
-import android.app.DownloadManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -21,14 +18,13 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.biblioteca.R;
 import com.example.biblioteca.databinding.ActivityMainBinding;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -39,7 +35,6 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-
 import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
@@ -47,8 +42,8 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
     private static final String TAG ="logout";
+    public FragmentManager fragmentManager;
 
-    File pathdescargas = new File(Environment.getExternalStorageDirectory()+File.separator+"BibliotecaAppDocumentos");
     GoogleSignInClient googleSignInClient;
 
     public final String[] EXTERNAL_PERMS = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
@@ -73,13 +68,11 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
 
             if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
                 Log.d("MyApp", "No SDCARD");
-            } else {
-                File directory = pathdescargas;
-                directory.mkdirs();
             }
 
             if (android.os.Build.VERSION.SDK_INT > 9) {
@@ -88,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                 StrictMode.setThreadPolicy(policy);
             }
 
-            //permisos
+
             requestForExternalStoragePermission();
             //acceder a la cuenta de google creada
             GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(MainActivity.this);
@@ -113,6 +106,8 @@ public class MainActivity extends AppCompatActivity {
             NavController navController = Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment_content_main);
             NavigationUI.setupActionBarWithNavController(MainActivity.this, navController, mAppBarConfiguration);
             NavigationUI.setupWithNavController(binding.navView, navController);
+
+
             //setters para metodos "Header View"
             View headerView = navigationView.getHeaderView(0);
             ImageView img = headerView.findViewById(R.id.nav_imageView);
@@ -135,6 +130,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+
     //Metodos para obtener el boton "atrás" al presionarlo
     @Override
     public void onBackPressed() {
@@ -169,8 +166,11 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(MainActivity.this, "Ha cerrado sesion correctamente", Toast.LENGTH_SHORT).show();
         finish();
     }
+    public void nube(View view){
+        Navigation.findNavController(view).navigate(R.id.nav_nube);
+    }
+    public void fav(View view) {
+        Navigation.findNavController(view).navigate(R.id.nav_fav);
 
-
-
-
+    }
 }

@@ -1,21 +1,28 @@
-package com.example.biblioteca.ui;
+package com.example.biblioteca.Fragmentos;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import com.example.biblioteca.Clases.FavAdapter;
+
+import com.example.biblioteca.Adapters.FavAdapter;
 import com.example.biblioteca.R;
 import com.example.biblioteca.databinding.FragmentFavoritosBinding;
+
 import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -33,7 +40,7 @@ public class FavoritosFragment extends Fragment {
     FavAdapter favAdapter;
     public String TAG = "fav";
     SharedPreferences sharedPreferences;
-
+    Set<String> set;
     /**
      * Creacion de vista
      * @param inflater
@@ -48,6 +55,7 @@ public class FavoritosFragment extends Fragment {
         listafav = binding.listafav.findViewById(R.id.listafav);
         registerForContextMenu(listafav);
         sharedPreferences = getActivity().getSharedPreferences("Archivos", MODE_PRIVATE);
+        set= new HashSet<String>();
         crearvalores();
         set_adapter();
         return binding.getRoot();
@@ -67,10 +75,8 @@ public class FavoritosFragment extends Fragment {
      */
     public void crearvalores(){
         pathlist.clear();
-        Set<String> set = new HashSet<String>();
         set = sharedPreferences.getStringSet("files", null);
         if (set!=null){
-            Log.d(TAG, "crearvalores: set= "+set.toString());
             pathlist.addAll(set);
         }
     }
@@ -102,17 +108,64 @@ public class FavoritosFragment extends Fragment {
     @Override
     public void onCreateContextMenu(@NonNull @NotNull ContextMenu menu, @NonNull @NotNull View v, @Nullable @org.jetbrains.annotations.Nullable ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
+        if (v.getId()==R.id.listafav){
+            MenuInflater inflater = getActivity().getMenuInflater();
+            inflater.inflate(R.menu.options_menu_favorites,menu);
+        }
 
     }
 
-    /**
-     * Metodo para la respuesta ante el menu generado
-     * @param item
-     * @return
-     */
 
     @Override
     public boolean onContextItemSelected(@NonNull @NotNull MenuItem item) {
-        return super.onContextItemSelected(item);
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch (item.getItemId()) {
+            case R.id.open:
+                Toast.makeText(getActivity(),"Aun no creado",Toast.LENGTH_SHORT).show();
+                open();
+            return true;
+            case R.id.save:
+                Toast.makeText(getActivity(),"Aun no creado",Toast.LENGTH_SHORT).show();
+                save();
+                return true;
+            case R.id.delete:
+                delete(pathlist.get(info.position));
+                return true;
+            case R.id.info:
+                Toast.makeText(getActivity(),"Aun no creado",Toast.LENGTH_SHORT).show();
+                info();
+                return true;
+            default:
+                return false;
+        }
+
+    }
+
+
+
+    private void open() {
+    }
+
+    private void save() {
+    }
+
+    private void info() {
+    }
+
+    private void delete(String s) {
+            set.clear();
+            pathlist.remove(s);
+            set.addAll(pathlist);
+            sharedPreferences
+                    .edit()
+                    .remove("files")
+                    .commit();
+            sharedPreferences.edit()
+                    .putStringSet("files",set)
+                    .commit();
+            Log.d(TAG, "delete: "+sharedPreferences.getAll().toString());
+            Toast.makeText(getContext(),"Favorito borrado",Toast.LENGTH_SHORT).show();
+            notificar();
+
     }
 }
