@@ -36,7 +36,6 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import com.example.biblioteca.Adapters.FilesAdapter;
 import com.example.biblioteca.Clases.Documento;
@@ -121,7 +120,6 @@ public class AlmacenamientoFragment extends Fragment {
         intSelected = new ArrayList<Integer>();
 
 
-
         lst_Folder=(ListView) binding.lsvFolder.findViewById(R.id.lsvFolder);
 
         registerForContextMenu(lst_Folder);
@@ -159,9 +157,6 @@ public class AlmacenamientoFragment extends Fragment {
                 onbackpress();
             }
         });
-
-
-
 
 
         binding.lsvFolder.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -203,11 +198,13 @@ public class AlmacenamientoFragment extends Fragment {
                 }
             }
         });
-
         lst_Folder.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
-
        return binding.getRoot();
     }
+
+    /**
+     *
+     */
     private void txpath(){
         binding.path.setText(dirPath);
 
@@ -227,7 +224,10 @@ public class AlmacenamientoFragment extends Fragment {
 
 
     }
-    /**Metodos para manejos de archivos*/
+
+    /**
+     * Crear los valores para el adapter
+      */
     private void RefreshListView() {
         /**/
         try{
@@ -253,13 +253,12 @@ public class AlmacenamientoFragment extends Fragment {
             Log.d(TAG, "RefreshListView: "+e.toString());
         }
     }
-    /**metodo para obtener las imagenes de archivos*/
     private Bitmap getBitmap(File file){
         return ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(file.getPath()),100,100);
     }
 
     /**
-     *
+     *Se le da valores al fileAdapter
      */
     private void  set_Adapter(){
          filesAdapter = new FilesAdapter(this.getActivity(),intImages,theNamesOfFiles);
@@ -267,7 +266,7 @@ public class AlmacenamientoFragment extends Fragment {
     }
 
     /**
-     *
+     *Recargar el adapter para mostrar los nuevos cambios
      */
     public void RefreshAdapter(){
         filesAdapter.notifyDataSetChanged();
@@ -275,7 +274,7 @@ public class AlmacenamientoFragment extends Fragment {
     }
 
     /**
-     *
+     *Al destruir la vista esta queda null para que pueda ser anclada en otro fragment
      */
     @Override
     public void onDestroyView() {
@@ -322,7 +321,7 @@ public class AlmacenamientoFragment extends Fragment {
                 Documento doc = new Documento();
                 String ext = file.getName().substring(file.getName().indexOf(".") + 1);
                 if (ext.equals("pdf")){
-                    carga(file.getName(),file,this.getContext(),getActivity().getSupportFragmentManager());
+                    carga(file.getName(),file,this.getContext());
                 }else {
                     Toast.makeText(getContext(),"Solo Archivos '.pdf'", Toast.LENGTH_LONG).show();
                 }
@@ -386,7 +385,7 @@ public class AlmacenamientoFragment extends Fragment {
      * @param file
      * @param bitmap
      */
-    private void info(File file, Bitmap bitmap) {
+    public void info(File file, Bitmap bitmap) {
         long createdDate = file.lastModified();
         DialogFragment newFragment = new InfoDialogFragment();
         Bundle args = new Bundle();
@@ -395,6 +394,15 @@ public class AlmacenamientoFragment extends Fragment {
         args.putString("date",String.valueOf(createdDate));
         args.putString("size", String.valueOf(file.getTotalSpace()));
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        if (bitmap!=null){
+        if (file.isFile()&&extencion(file).equals("application/pdf")){
+            bitmap= pdfToBitmap(file);
+        }else if (file.isDirectory()){
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        }
+        }else {
+            bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.file);
+        }
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] byteArray = stream.toByteArray();
         args.putByteArray("img",byteArray);
@@ -406,7 +414,7 @@ public class AlmacenamientoFragment extends Fragment {
      *
      * @param file
      */
-    private void delete(File file) {
+    public void delete(File file) {
         List<String> command = new ArrayList<String>();
         try {
             command.clear();
@@ -434,34 +442,32 @@ public class AlmacenamientoFragment extends Fragment {
      * @param file
      */
     private void renombrar(File file) {
-
         try{
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+            LayoutInflater inflater = this.getLayoutInflater();
+            final View dialogView = inflater.inflate(R.layout.dialog_rename_file, null);
+            dialogBuilder.setView(dialogView);
 
-                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
-                LayoutInflater inflater = this.getLayoutInflater();
-                final View dialogView = inflater.inflate(R.layout.dialog_rename_file, null);
-                dialogBuilder.setView(dialogView);
-
-                final EditText newname = (EditText) dialogView.findViewById(R.id.newname);
+            final EditText newname = (EditText) dialogView.findViewById(R.id.newname);
             newname.setText(file.getName());
-                dialogBuilder.setTitle("Renombrar");
-                dialogBuilder.setMessage("Ingrese el nuevo nombre:");
-                dialogBuilder.setPositiveButton("Listo", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        File f = new File(file.toString());
-                        extencion(file);
-                        File fRename = new File(dirPath+"/"+newname.getText().toString()+"."+file.getName().substring(file.getName().indexOf(".") + 1));
-                        f.renameTo(fRename);
-                        RefreshListView();
-                        RefreshAdapter();
-                    }
-                });
-                dialogBuilder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                    }
-                });
-                AlertDialog b = dialogBuilder.create();
-                b.show();
+            dialogBuilder.setTitle("Renombrar");
+            dialogBuilder.setMessage("Ingrese el nuevo nombre:");
+            dialogBuilder.setPositiveButton("Listo", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    File f = new File(file.toString());
+                    extencion(file);
+                    File fRename = new File(dirPath+"/"+newname.getText().toString()+"."+file.getName().substring(file.getName().indexOf(".") + 1));
+                    f.renameTo(fRename);
+                    RefreshListView();
+                    RefreshAdapter();
+                }
+            });
+            dialogBuilder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                }
+            });
+            AlertDialog b = dialogBuilder.create();
+            b.show();
         }catch (Exception e){
             Toast.makeText(getContext(), e.toString(), Toast.LENGTH_LONG).show();
         }
@@ -494,26 +500,19 @@ public class AlmacenamientoFragment extends Fragment {
      * @param nombre
      * @param path
      * @param context
-     * @param fragmentManager
      */
-    public void carga(String nombre, File path, Context context, FragmentManager fragmentManager) {
+    public void carga(String nombre, File path, Context context) {
         Documento doc = new Documento();
-        /**preparacion de pdf*/
         FileInputStream stream = null;
         try {
             stream = new FileInputStream(new File(String.valueOf(path)));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        /**creacion de imagen*/
         Bitmap image  = pdfToBitmap(new File(String.valueOf(path)));
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
-        /**
-         * Carga de archivos IMG para el PDF y El PDF como Stream
-         * */
-
         AlertDialog.Builder builder
                 = new AlertDialog
                 .Builder(context);
@@ -564,8 +563,6 @@ public class AlmacenamientoFragment extends Fragment {
                                     }
                                 }
                             });
-
-
                     }
                 });
             }
