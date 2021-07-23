@@ -20,7 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 /**
  *
  */
-public class loginCorreo extends AppCompatActivity {
+public class LoginCorreo extends AppCompatActivity {
 
     private EditText correo, contrasena;
     private FirebaseAuth firebaseAuth;
@@ -51,7 +51,7 @@ public class loginCorreo extends AppCompatActivity {
      * @param view
      */
     public void irLogin(View view){
-        Intent i = new Intent(this, login.class);
+        Intent i = new Intent(this, Login.class);
         startActivity(i);
         finish();
     }
@@ -68,8 +68,8 @@ public class loginCorreo extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
 
                             FirebaseUser user = firebaseAuth.getCurrentUser();
-                            startActivity(new Intent(loginCorreo.this, mainActivity.class));
-                            Toast.makeText(loginCorreo.this,"Bienvenido "+user.getDisplayName(),Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(LoginCorreo.this, MainActivity.class));
+                            Toast.makeText(LoginCorreo.this,"Bienvenido "+user.getDisplayName(),Toast.LENGTH_SHORT).show();
                             finishAffinity();
                         } else {
                             // If sign in fails, display a message to the user.

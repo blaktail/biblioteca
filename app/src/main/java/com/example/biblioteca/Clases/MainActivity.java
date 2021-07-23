@@ -39,7 +39,7 @@ import com.google.firebase.auth.FirebaseUser;
  *
  */
 
-public class mainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
@@ -99,10 +99,10 @@ public class mainActivity extends AppCompatActivity {
 
             requestForExternalStoragePermission();
             //acceder a la cuenta de google creada
-            GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(mainActivity.this);
+            GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(MainActivity.this);
             GoogleSignInOptions gso = new GoogleSignInOptions
                     .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestProfile().build();
-            googleSignInClient = GoogleSignIn.getClient(mainActivity.this, gso);
+            googleSignInClient = GoogleSignIn.getClient(MainActivity.this, gso);
             //acceder al usuario de firebase
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             //generico creacion de drawer para la vista de fragmentos
@@ -118,8 +118,8 @@ public class mainActivity extends AppCompatActivity {
                     R.id.nav_fav, R.id.nav_nube, R.id.nav_almacenamiento)
                     .setDrawerLayout(drawer)
                     .build();
-            NavController navController = Navigation.findNavController(mainActivity.this, R.id.nav_host_fragment_content_main);
-            NavigationUI.setupActionBarWithNavController(mainActivity.this, navController, mAppBarConfiguration);
+            NavController navController = Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment_content_main);
+            NavigationUI.setupActionBarWithNavController(MainActivity.this, navController, mAppBarConfiguration);
             NavigationUI.setupWithNavController(binding.navView, navController);
 
 
@@ -177,8 +177,8 @@ public class mainActivity extends AppCompatActivity {
     public void Signout(MenuItem item) {
         FirebaseAuth.getInstance().signOut();
         googleSignInClient.signOut();
-        startActivity(new Intent(mainActivity.this, login.class));
-        Toast.makeText(mainActivity.this, "Ha cerrado sesion correctamente", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(MainActivity.this, Login.class));
+        Toast.makeText(MainActivity.this, "Ha cerrado sesion correctamente", Toast.LENGTH_SHORT).show();
         finish();
     }
     public void nube(View view){

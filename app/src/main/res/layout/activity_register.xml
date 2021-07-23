@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Clases.register">
+    tools:context=".Clases.Register">
 
     <LinearLayout
         android:layout_width="0dp"
@@ -46,7 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Contraseña"
+            android:hint="Contrasena"
             android:inputType="textPassword" />
 
         <Space
@@ -54,11 +54,11 @@
             android:layout_height="8dp" />
 
         <EditText
-            android:id="@+id/edtConfcontraseña"
+            android:id="@+id/edtConfcontrasena"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Confirmar Contraseña"
+            android:hint="Confirmar Contrasena"
             android:inputType="textPassword" />
 
         <LinearLayout

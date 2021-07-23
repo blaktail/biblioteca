@@ -10,7 +10,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.biblioteca.R;
-import com.example.biblioteca.databinding.ActivityLoginBinding;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -27,7 +26,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 /**
  *
  */
-public class login extends AppCompatActivity {
+public class Login extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 100;
     private GoogleSignInClient googleSignInClient;
@@ -43,7 +42,7 @@ public class login extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        com.example.biblioteca.databinding.ActivityLoginBinding binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        com.example.biblioteca.databinding.ActivityLoginBinding binding = com.example.biblioteca.databinding.ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         //creacion de opciones para el uso de inicio con Google
         GoogleSignInOptions gso = new GoogleSignInOptions
@@ -94,8 +93,8 @@ public class login extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
                     public void onSuccess(AuthResult authResult) {
-                        startActivity(new Intent(login.this, mainActivity.class));
-                        Toast.makeText(login.this,"Bienvenido "+account.getDisplayName(),Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(Login.this, MainActivity.class));
+                        Toast.makeText(Login.this,"Bienvenido "+account.getDisplayName(),Toast.LENGTH_SHORT).show();
                         finish();
 
                     }
@@ -118,8 +117,8 @@ public class login extends AppCompatActivity {
             Toast.makeText(this,"Iniciando sesion...",Toast.LENGTH_SHORT).show();
             firebaseAuthWithGoogle(account);
         } else if(user!=null){
-            startActivity(new Intent(login.this, mainActivity.class));
-            Toast.makeText(login.this,"Bienvenido "+user.getDisplayName(),Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(Login.this, MainActivity.class));
+            Toast.makeText(Login.this,"Bienvenido "+user.getDisplayName(),Toast.LENGTH_SHORT).show();
             finish();
 
         }
@@ -131,7 +130,7 @@ public class login extends AppCompatActivity {
      * @param view
      */
     public void irRegistro(View view){
-        Intent i = new Intent(this, register.class);
+        Intent i = new Intent(this, Register.class);
         startActivity(i);
     }
     /**
@@ -139,7 +138,7 @@ public class login extends AppCompatActivity {
      * @param view
      */
     public void irIniciosesion(View view){
-        Intent i = new Intent(this, loginCorreo.class);
+        Intent i = new Intent(this, LoginCorreo.class);
         startActivity(i);
 
     }

@@ -22,13 +22,13 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 /**
  *
  */
-public class register extends AppCompatActivity {
+public class Register extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
     private EditText correo, contrasena, contrasenac,nombre;
 
     public void irMain(View view){
-        Intent i = new Intent(this, login.class);
+        Intent i = new Intent(this, Login.class);
         startActivity(i);
     }
 
@@ -86,7 +86,7 @@ public class register extends AppCompatActivity {
                                     }
                                 });
 
-                                Intent i = new Intent(getApplicationContext(), login.class);
+                                Intent i = new Intent(getApplicationContext(), Login.class);
                                 startActivity(i);
                             } else {
                                 Toast.makeText(getApplicationContext(), "Authentication failed.", Toast.LENGTH_SHORT).show();
