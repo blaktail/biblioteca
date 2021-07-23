@@ -128,18 +128,17 @@ public class FavoritosFragment extends Fragment {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.open:
-                Toast.makeText(getActivity(),"Aun no creado",Toast.LENGTH_SHORT).show();
                 open(pathlist.get(info.position));
             return true;
             case R.id.save:
-                Toast.makeText(getActivity(),"Aun no creado",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),"Guardado...",Toast.LENGTH_SHORT).show();
                 save(pathlist.get(info.position));
                 return true;
             case R.id.delete:
                 delete(pathlist.get(info.position));
                 return true;
             case R.id.info:
-                Toast.makeText(getActivity(),"Aun no creado",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),"Informacion",Toast.LENGTH_SHORT).show();
                 info(pathlist.get(info.position));
                 return true;
             default:

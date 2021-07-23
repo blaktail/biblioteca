@@ -8,9 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.biblioteca.R;
-import com.example.biblioteca.Fragmentos.AlmacenamientoFragment;
-
 import java.io.File;
 import java.util.ArrayList;
 
