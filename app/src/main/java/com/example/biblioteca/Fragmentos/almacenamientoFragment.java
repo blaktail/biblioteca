@@ -71,7 +71,7 @@ import java.util.Set;
 import static android.content.Context.MODE_PRIVATE;
 
 
-public class AlmacenamientoFragment extends Fragment {
+public class almacenamientoFragment extends Fragment {
 
     private FragmentAlmacenamientoBinding binding;
     public ListView lst_Folder;

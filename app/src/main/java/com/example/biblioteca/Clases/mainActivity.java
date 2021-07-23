@@ -50,6 +50,10 @@ public class mainActivity extends AppCompatActivity {
 
     public final String[] EXTERNAL_PERMS = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     public final int EXTERNAL_REQUEST = 138;
+
+    /**
+     *
+     */
     public void requestForExternalStoragePermission() {
         boolean isPermissionOn = true;
         final int version = Build.VERSION.SDK_INT;
@@ -60,10 +64,19 @@ public class mainActivity extends AppCompatActivity {
             }
         }
     }
+
+    /**
+     *
+     * @return
+     */
     public boolean canAccessExternalSd() {
         return (hasPermission());
     }
 
+    /**
+     *
+     * @return
+     */
     private boolean hasPermission() {
         return (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE));
     }

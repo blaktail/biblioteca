@@ -3,12 +3,12 @@ package com.example.biblioteca.Clases;
 /**
  *
  */
-public class documento {
+public class Documento {
 
     String Nombre,Img_pdf,  Id_usuario,  url,fecha;
-    public documento(){}
+    public Documento(){}
 
-    public documento(String nombre, String img_pdf, String id_usuario, String url, String fecha) {
+    public Documento(String nombre, String img_pdf, String id_usuario, String url, String fecha) {
         this.Nombre = nombre;
         this.Img_pdf = img_pdf;
         this.Id_usuario = id_usuario;
