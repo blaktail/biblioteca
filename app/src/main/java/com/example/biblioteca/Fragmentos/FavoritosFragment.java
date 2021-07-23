@@ -1,6 +1,8 @@
 package com.example.biblioteca.Fragmentos;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -23,6 +25,7 @@ import com.example.biblioteca.databinding.FragmentFavoritosBinding;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -115,43 +118,74 @@ public class FavoritosFragment extends Fragment {
 
     }
 
-
+    /**
+     *
+     * @param item
+     * @return
+     */
     @Override
     public boolean onContextItemSelected(@NonNull @NotNull MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.open:
                 Toast.makeText(getActivity(),"Aun no creado",Toast.LENGTH_SHORT).show();
-                open();
+                open(pathlist.get(info.position));
             return true;
             case R.id.save:
                 Toast.makeText(getActivity(),"Aun no creado",Toast.LENGTH_SHORT).show();
-                save();
+                save(pathlist.get(info.position));
                 return true;
             case R.id.delete:
                 delete(pathlist.get(info.position));
                 return true;
             case R.id.info:
                 Toast.makeText(getActivity(),"Aun no creado",Toast.LENGTH_SHORT).show();
-                info();
+                info(pathlist.get(info.position));
                 return true;
             default:
                 return false;
         }
+    }
+
+    /**
+     *
+     * @param s
+     */
+    private void open(String s) {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        File file = new File(s);
+        String type = new AlmacenamientoFragment().extencion(file);
+        intent.setDataAndType(Uri.fromFile(file), type);
+        startActivity(intent);
+    }
+
+    /**
+     *
+     * @param s
+     */
+    private void save(String s) {
+        File file = new File(s);
+        new AlmacenamientoFragment().carga(file.getName(),file,getContext());
 
     }
 
+    /**
+     *
+     * @param s
+     */
+    private void info(String s) {
+        File file = new File(s);
+        new AlmacenamientoFragment().info(file,null);
 
-
-    private void open() {
     }
 
-    private void save() {
-    }
-
-    private void info() {
-    }
-
+    /**
+     *
+     * @param s
+     */
     private void delete(String s) {
             set.clear();
             pathlist.remove(s);

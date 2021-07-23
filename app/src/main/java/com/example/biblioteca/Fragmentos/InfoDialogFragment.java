@@ -33,6 +33,11 @@ public class InfoDialogFragment extends DialogFragment {
     public InfoDialogFragment() {
     }
 
+    /**
+     *
+     * @param savedInstanceState
+     * @return
+     */
     @NonNull
     @NotNull
     @Override
