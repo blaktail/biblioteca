@@ -15,14 +15,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Biblioteca">
-        <activity android:name=".Clases.LoginCorreo" />
-        <activity android:name=".Clases.Register" />
+        <activity android:name=".Clases.loginCorreo" />
+        <activity android:name=".Clases.register" />
         <activity
-            android:name=".Clases.MainActivity"
+            android:name=".Clases.mainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/Theme.Biblioteca.NoActionBar" />
         <activity
-            android:name=".Clases.Login"
+            android:name=".Clases.login"
             android:theme="@style/Theme.Biblioteca.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

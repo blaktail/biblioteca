@@ -8,10 +8,13 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.biblioteca.Fragmentos.almacenamientoFragment;
+import com.example.biblioteca.R;
+
 import java.io.File;
 import java.util.ArrayList;
 
-public class FavAdapter extends BaseAdapter {
+public class favAdapter extends BaseAdapter {
 
     private final Activity context;
     private final ArrayList<String> files;
@@ -21,7 +24,7 @@ public class FavAdapter extends BaseAdapter {
      * @param context
      * @param files
      */
-    public FavAdapter(Activity context, ArrayList<String> files) {
+    public favAdapter(Activity context, ArrayList<String> files) {
         this.context = context;
         this.files = files;
     }
@@ -51,7 +54,7 @@ public class FavAdapter extends BaseAdapter {
         nametx.setText(file.getName().trim());
         pathtx.setText(file.getPath());
         Log.d("fav", "getView: "+file.getPath());
-        AlmacenamientoFragment alm = new AlmacenamientoFragment();
+        almacenamientoFragment alm = new almacenamientoFragment();
 
         img.setImageBitmap(alm.pdfToBitmap(file));
 

@@ -1,12 +1,14 @@
 package com.example.biblioteca.Clases;
 
-
-public class Documento {
+/**
+ *
+ */
+public class documento {
 
     String Nombre,Img_pdf,  Id_usuario,  url,fecha;
-    public Documento(){}
+    public documento(){}
 
-    public Documento(String nombre, String img_pdf, String id_usuario, String url,String fecha) {
+    public documento(String nombre, String img_pdf, String id_usuario, String url, String fecha) {
         this.Nombre = nombre;
         this.Img_pdf = img_pdf;
         this.Id_usuario = id_usuario;

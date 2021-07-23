@@ -19,9 +19,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.biblioteca.Adapters.FavAdapter;
 import com.example.biblioteca.R;
 import com.example.biblioteca.databinding.FragmentFavoritosBinding;
+import com.example.biblioteca.Adapters.favAdapter;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -35,12 +35,12 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  * Fragmento Favoritos
  */
-public class FavoritosFragment extends Fragment {
+public class favoritosFragment extends Fragment {
 
     private FragmentFavoritosBinding binding;
     ArrayList<String> pathlist;
     GridView listafav;
-    FavAdapter favAdapter;
+    com.example.biblioteca.Adapters.favAdapter favAdapter;
     public String TAG = "fav";
     SharedPreferences sharedPreferences;
     Set<String> set;
@@ -89,7 +89,7 @@ public class FavoritosFragment extends Fragment {
      */
     public void set_adapter(){
         Log.d(TAG, "set_adapter: "+pathlist.toArray().length);
-        favAdapter = new FavAdapter(this.getActivity(),pathlist);
+        favAdapter = new favAdapter(this.getActivity(),pathlist);
         listafav.setNumColumns(2);
         listafav.setAdapter(favAdapter);
         Log.d(TAG, "set_adapter: "+listafav.getAdapter().isEmpty());
@@ -156,7 +156,7 @@ public class FavoritosFragment extends Fragment {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         File file = new File(s);
-        String type = new AlmacenamientoFragment().extencion(file);
+        String type = new almacenamientoFragment().extencion(file);
         intent.setDataAndType(Uri.fromFile(file), type);
         startActivity(intent);
     }
@@ -167,7 +167,7 @@ public class FavoritosFragment extends Fragment {
      */
     private void save(String s) {
         File file = new File(s);
-        new AlmacenamientoFragment().carga(file.getName(),file,getContext());
+        new almacenamientoFragment().carga(file.getName(),file,getContext());
 
     }
 
@@ -177,7 +177,7 @@ public class FavoritosFragment extends Fragment {
      */
     private void info(String s) {
         File file = new File(s);
-        new AlmacenamientoFragment().info(file,null);
+        new almacenamientoFragment().info(file,null);
 
     }
 
