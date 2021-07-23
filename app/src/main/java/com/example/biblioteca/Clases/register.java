@@ -1,14 +1,14 @@
 package com.example.biblioteca.Clases;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.biblioteca.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -19,18 +19,23 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
-import org.w3c.dom.Text;
-
-public class Register extends AppCompatActivity {
+/**
+ *
+ */
+public class register extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
     private EditText correo, contrasena, contrasenac,nombre;
 
     public void irMain(View view){
-        Intent i = new Intent(this, Login.class);
+        Intent i = new Intent(this, login.class);
         startActivity(i);
     }
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,9 +45,12 @@ public class Register extends AppCompatActivity {
         nombre = findViewById(R.id.edtUsuario);
         correo = findViewById(R.id.edtemailLogin);
         contrasena = findViewById(R.id.edtpassLogin);
-        contrasenac = findViewById(R.id.edtConfcontraseña);
+        contrasenac = findViewById(R.id.edtConfcontrasena);
     }
 
+    /**
+     *
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -54,8 +62,10 @@ public class Register extends AppCompatActivity {
     }
 
 
-
-    // registro de usuarios por correo
+    /**
+     *
+     * @param view
+     */
     public void registrarUsuario(View view){
         if (contrasena.getText().toString().equals(contrasenac.getText().toString())){
             firebaseAuth.createUserWithEmailAndPassword(correo.getText().toString(), contrasena.getText().toString())
@@ -67,7 +77,7 @@ public class Register extends AppCompatActivity {
 
                                 UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                         .setDisplayName(nombre.getText().toString())
-                                        .setPhotoUri(Uri.parse("https://example.com/jane-q-user/profile.jpg"))
+                                        .setPhotoUri(Uri.parse("https://d1nhio0ox7pgb.cloudfront.net/_img/o_collection_png/green_dark_grey/256x256/plain/user.png"))
                                         .build();
                                 user.updateProfile(profileUpdates).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
@@ -76,7 +86,7 @@ public class Register extends AppCompatActivity {
                                     }
                                 });
 
-                                Intent i = new Intent(getApplicationContext(), Login.class);
+                                Intent i = new Intent(getApplicationContext(), login.class);
                                 startActivity(i);
                             } else {
                                 Toast.makeText(getApplicationContext(), "Authentication failed.", Toast.LENGTH_SHORT).show();
@@ -87,12 +97,4 @@ public class Register extends AppCompatActivity {
         } else {
             Toast.makeText(this,"Las contraseñas no coinciden",Toast.LENGTH_SHORT).show();}
     }
-
-
-
-
-
-
-
-
 }

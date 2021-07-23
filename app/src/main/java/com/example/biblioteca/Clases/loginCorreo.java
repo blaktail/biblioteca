@@ -1,14 +1,14 @@
 package com.example.biblioteca.Clases;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.biblioteca.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -17,18 +17,25 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class LoginCorreo extends AppCompatActivity {
+/**
+ *
+ */
+public class loginCorreo extends AppCompatActivity {
 
-    private EditText correo, contraseña;
+    private EditText correo, contrasena;
     private FirebaseAuth firebaseAuth;
     private Button btnIngresar;
 
+    /**
+     * Al crear vista
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_correo);
         correo = findViewById(R.id.edtemailLogin);
-        contraseña = findViewById(R.id.edtpassLogin);
+        contrasena = findViewById(R.id.edtpassLogin);
         firebaseAuth = FirebaseAuth.getInstance();
         btnIngresar = findViewById(R.id.btnIniciar);
         btnIngresar.setOnClickListener(new View.OnClickListener() {
@@ -39,14 +46,21 @@ public class LoginCorreo extends AppCompatActivity {
         });
     }
 
+    /**
+     *
+     * @param view
+     */
     public void irLogin(View view){
-        Intent i = new Intent(this, Login.class);
+        Intent i = new Intent(this, login.class);
         startActivity(i);
         finish();
     }
 
+    /**
+     *
+     */
     public void IniciarSesion(){
-        firebaseAuth.signInWithEmailAndPassword(correo.getText().toString(), contraseña.getText().toString())
+        firebaseAuth.signInWithEmailAndPassword(correo.getText().toString(), contrasena.getText().toString())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -54,8 +68,8 @@ public class LoginCorreo extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
 
                             FirebaseUser user = firebaseAuth.getCurrentUser();
-                            startActivity(new Intent(LoginCorreo.this, MainActivity.class));
-                            Toast.makeText(LoginCorreo.this,"Bienvenido "+user.getDisplayName(),Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(loginCorreo.this, mainActivity.class));
+                            Toast.makeText(loginCorreo.this,"Bienvenido "+user.getDisplayName(),Toast.LENGTH_SHORT).show();
                             finishAffinity();
                         } else {
                             // If sign in fails, display a message to the user.

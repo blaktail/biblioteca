@@ -24,9 +24,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-public class Login extends AppCompatActivity {
+/**
+ *
+ */
+public class login extends AppCompatActivity {
 
-    private ActivityLoginBinding binding;
     private static final int RC_SIGN_IN = 100;
     private GoogleSignInClient googleSignInClient;
 
@@ -34,12 +36,14 @@ public class Login extends AppCompatActivity {
 
     private static final String TAG = "GOOGLE_SIGN_IN";
 
-
+    /**
+     * Crear vista
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityLoginBinding.inflate(getLayoutInflater());
-
+        com.example.biblioteca.databinding.ActivityLoginBinding binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         //creacion de opciones para el uso de inicio con Google
         GoogleSignInOptions gso = new GoogleSignInOptions
@@ -57,7 +61,12 @@ public class Login extends AppCompatActivity {
 
     }
 
-
+    /**
+     * Espera para inicio de google por boton
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -74,15 +83,19 @@ public class Login extends AppCompatActivity {
             }
         }
     }
-    //Valida el usuario por credencial entre firebase y google
+
+    /**
+     * Metodo para obtener la instancia de firebase + credencial de google
+      * @param account
+     */
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(),null);
         firebaseAuth.signInWithCredential(credential)
                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
                     public void onSuccess(AuthResult authResult) {
-                        startActivity(new Intent(Login.this, MainActivity.class));
-                        Toast.makeText(Login.this,"Bienvenido "+account.getDisplayName(),Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(login.this, mainActivity.class));
+                        Toast.makeText(login.this,"Bienvenido "+account.getDisplayName(),Toast.LENGTH_SHORT).show();
                         finish();
 
                     }
@@ -92,6 +105,9 @@ public class Login extends AppCompatActivity {
                 );
     }
 
+    /**
+     * comprobar si existen sesiones iniciadas en la app
+     */
    @Override
     protected void onStart() {
         super.onStart();
@@ -102,21 +118,28 @@ public class Login extends AppCompatActivity {
             Toast.makeText(this,"Iniciando sesion...",Toast.LENGTH_SHORT).show();
             firebaseAuthWithGoogle(account);
         } else if(user!=null){
-            startActivity(new Intent(Login.this, MainActivity.class));
-            Toast.makeText(Login.this,"Bienvenido "+user.getDisplayName(),Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(login.this, mainActivity.class));
+            Toast.makeText(login.this,"Bienvenido "+user.getDisplayName(),Toast.LENGTH_SHORT).show();
             finish();
 
         }
 
     }
 
+    /**
+     * Redireccionar a la siguente activity
+     * @param view
+     */
     public void irRegistro(View view){
-        Intent i = new Intent(this, Register.class);
+        Intent i = new Intent(this, register.class);
         startActivity(i);
     }
-
+    /**
+     * Redireccionar a la siguente activity
+     * @param view
+     */
     public void irIniciosesion(View view){
-        Intent i = new Intent(this, LoginCorreo.class);
+        Intent i = new Intent(this, loginCorreo.class);
         startActivity(i);
 
     }
