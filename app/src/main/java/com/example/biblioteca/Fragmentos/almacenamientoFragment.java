@@ -337,7 +337,7 @@ public class almacenamientoFragment extends Fragment {
                 if (!file.isDirectory()){
                     if (extencion(file).equals("application/pdf")){
                         favorite(file);
-                        Toast.makeText(getContext(),"Archivo guardado como favorito",Toast.LENGTH_SHORT).show();
+
                     }else {
                         Toast.makeText(getContext(),"Solo Archivos PDF",Toast.LENGTH_SHORT).show();
                     }
@@ -368,16 +368,22 @@ public class almacenamientoFragment extends Fragment {
         set = sharedPreferences.getStringSet("files", null);
         if (set!=null){
             pathlist.addAll(set);
+            if (!set.contains(file.toPath().toString())){
+                pathlist.add(file.toPath().toString());
+                set = new HashSet<String>(pathlist);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putStringSet("files", set);
+                editor.commit();
+                new MainActivity().fav(getView());
+            }else {
+                Toast.makeText(getContext(), file.getName()+"El archivo la existe como favorito", Toast.LENGTH_LONG).show();
+            }
             Log.d(TAG, "favorite: no soy null");
         }else{
             Log.d(TAG, "favorite: soy null");
         }
-        pathlist.add(file.toPath().toString());
-        set = new HashSet<String>(pathlist);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putStringSet("files", set);
-        editor.commit();
-        new MainActivity().fav(getView());
+
+
     }
 
     /**

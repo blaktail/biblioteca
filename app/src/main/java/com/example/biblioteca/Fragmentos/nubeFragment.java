@@ -239,7 +239,7 @@ public class nubeFragment extends Fragment {
      * @param documento
      */
     private void info(Documento documento) {
-        Toast.makeText(getActivity(),"Aun no creado",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(),"Informacion",Toast.LENGTH_SHORT).show();
         DialogFragment newFragment = new infoDialogFragment();
         Bundle args = new Bundle();
         args.putString("name",documento.getNombre());
