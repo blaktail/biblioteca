@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class NubeAdapter extends BaseAdapter {
+public class nubeAdapter extends BaseAdapter {
     private final Activity context;
     private final ArrayList<String> imagenes;
     private final ArrayList<String> texto;
@@ -34,7 +34,7 @@ public class NubeAdapter extends BaseAdapter {
      * @param imagenes
      * @param texto
      */
-    public NubeAdapter(Activity context, ArrayList<String> imagenes, ArrayList<String> texto) {
+    public nubeAdapter(Activity context, ArrayList<String> imagenes, ArrayList<String> texto) {
         this.context = context;
         this.imagenes = imagenes;
         this.texto = texto;

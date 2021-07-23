@@ -37,7 +37,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
-import com.example.biblioteca.Adapters.FilesAdapter;
+import com.example.biblioteca.Adapters.filesAdapter;
 import com.example.biblioteca.Clases.Documento;
 import com.example.biblioteca.Clases.MainActivity;
 import com.example.biblioteca.R;
@@ -80,7 +80,7 @@ public class almacenamientoFragment extends Fragment {
     public ArrayList<String> theNamesOfFiles;
     public ArrayList<Bitmap> intImages;
     public ArrayList<String> pathlist;
-    public FilesAdapter filesAdapter;
+    public com.example.biblioteca.Adapters.filesAdapter filesAdapter;
     public File dir;
     public String path;
     public ArrayList<Integer> intSelected;
@@ -261,7 +261,7 @@ public class almacenamientoFragment extends Fragment {
      *Se le da valores al fileAdapter
      */
     private void  set_Adapter(){
-         filesAdapter = new FilesAdapter(this.getActivity(),intImages,theNamesOfFiles);
+         filesAdapter = new filesAdapter(this.getActivity(),intImages,theNamesOfFiles);
          lst_Folder.setAdapter(filesAdapter);
     }
 
@@ -321,7 +321,7 @@ public class almacenamientoFragment extends Fragment {
                 Documento doc = new Documento();
                 String ext = file.getName().substring(file.getName().indexOf(".") + 1);
                 if (ext.equals("pdf")){
-                    carga(file.getName(),file,this.getContext());
+                    carga(file.getName(),file,this.getContext(),getView());
                 }else {
                     Toast.makeText(getContext(),"Solo Archivos '.pdf'", Toast.LENGTH_LONG).show();
                 }
@@ -387,7 +387,7 @@ public class almacenamientoFragment extends Fragment {
      */
     public void info(File file, Bitmap bitmap) {
         long createdDate = file.lastModified();
-        DialogFragment newFragment = new InfoDialogFragment();
+        DialogFragment newFragment = new infoDialogFragment();
         Bundle args = new Bundle();
         args.putString("name",file.getName());
         args.putString("path",path);
@@ -501,7 +501,12 @@ public class almacenamientoFragment extends Fragment {
      * @param path
      * @param context
      */
-    public void carga(String nombre, File path, Context context) {
+    public void carga(String nombre, File path, Context context,View view) {
+        FirebaseUser auth = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        StorageReference storageRef =storage.getReference("Archivos");
+        DatabaseReference myRef = database.getReference("Documentos");
         Documento doc = new Documento();
         FileInputStream stream = null;
         try {
@@ -519,7 +524,7 @@ public class almacenamientoFragment extends Fragment {
         builder.setMessage("Cargando Archivo...");
         builder.setCancelable(false);
         AlertDialog alertDialog = builder.create();
-        ref = myRef.push().getKey();
+        String ref = myRef.push().getKey();
         UploadTask imagetask = (UploadTask) storageRef.child(ref).child("img").putBytes(data);
         imagetask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -557,7 +562,7 @@ public class almacenamientoFragment extends Fragment {
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     switch (i){
                                         case -1:
-                                            new MainActivity().nube(getView());
+                                            new MainActivity().nube(view);
                                         case -2: dialogInterface.cancel();
                                         default: dialogInterface.cancel();
                                     }

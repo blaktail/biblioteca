@@ -14,7 +14,7 @@ import com.example.biblioteca.R;
 
 import java.util.ArrayList;
 
-public class FilesAdapter extends BaseAdapter {
+public class filesAdapter extends BaseAdapter {
 
     private final Activity context;
     private final ArrayList<Bitmap> imagenes;
@@ -26,7 +26,7 @@ public class FilesAdapter extends BaseAdapter {
      * @param imagenes
      * @param texto
      */
-    public FilesAdapter(Activity context, ArrayList<Bitmap> imagenes, ArrayList<String> texto) {
+    public filesAdapter(Activity context, ArrayList<Bitmap> imagenes, ArrayList<String> texto) {
         this.context = context;
         this.imagenes = imagenes;
         this.texto = texto;

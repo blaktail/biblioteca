@@ -167,7 +167,7 @@ public class favoritosFragment extends Fragment {
      */
     private void save(String s) {
         File file = new File(s);
-        new almacenamientoFragment().carga(file.getName(),file,getContext());
+        new almacenamientoFragment().carga(file.getName(),file,getContext(),getView());
 
     }
 

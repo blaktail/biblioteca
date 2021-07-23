@@ -24,13 +24,13 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class InfoDialogFragment extends DialogFragment {
+public class infoDialogFragment extends DialogFragment {
 
 
     private String name,path,date,img_pdf;
     private byte[] img;
 
-    public InfoDialogFragment() {
+    public infoDialogFragment() {
     }
 
     /**

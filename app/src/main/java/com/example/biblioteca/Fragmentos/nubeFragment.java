@@ -22,7 +22,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
-import com.example.biblioteca.Adapters.NubeAdapter;
+import com.example.biblioteca.Adapters.nubeAdapter;
 import com.example.biblioteca.Clases.Documento;
 import com.example.biblioteca.R;
 import com.example.biblioteca.databinding.FragmentNubeBinding;
@@ -40,14 +40,14 @@ import java.io.File;
 import java.util.ArrayList;
 
 
-public class NubeFragment extends Fragment {
+public class nubeFragment extends Fragment {
 
     private static final String TAG = "nube";
     private FragmentNubeBinding binding;
     ArrayList<String> name;
     ArrayList<String> imgs;
     Documento doc;
-    NubeAdapter nubeAdapter;
+    com.example.biblioteca.Adapters.nubeAdapter nubeAdapter;
     TextView textview;
     GridView gridView;
     FirebaseUser user;
@@ -153,7 +153,7 @@ public class NubeFragment extends Fragment {
                                 date.add(result.getFecha());
                                 ads.add(ds);
                                 documentos.add(result);
-                                nubeAdapter = new NubeAdapter(getActivity(), imgs, name);
+                                nubeAdapter = new nubeAdapter(getActivity(), imgs, name);
 
                                 actualizarGrid();
                                 set_adapter();
@@ -197,13 +197,12 @@ public class NubeFragment extends Fragment {
     public boolean onContextItemSelected(@NonNull @NotNull MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
-            case R.id.download_nube: download((String) url.get(info.position));
+            case R.id.download_nube: download((String) url.get(info.position),name.get(info.position));
             return true;
             case R.id.delete: delete(ads.get(info.position));
             return true;
             case R.id.info: info(documentos.get(info.position));
             return true;
-
             default:
                 Log.d(TAG, "onContextItemSelected: Default entregado");
             return true;
@@ -241,7 +240,7 @@ public class NubeFragment extends Fragment {
      */
     private void info(Documento documento) {
         Toast.makeText(getActivity(),"Aun no creado",Toast.LENGTH_SHORT).show();
-        DialogFragment newFragment = new InfoDialogFragment();
+        DialogFragment newFragment = new infoDialogFragment();
         Bundle args = new Bundle();
         args.putString("name",documento.getNombre());
         args.putString("path",documento.getUrl());
@@ -254,9 +253,10 @@ public class NubeFragment extends Fragment {
     /**
      * Item del menu para descargar el archivo
      * @param url
+     * @param s
      */
 
-    private void download(String url) {
+    private void download(String url, String s) {
         Uri u = Uri.parse(url);
         Log.d(TAG, "open: "+u.toString());
         Intent intent = new Intent(Intent.ACTION_VIEW,u);
